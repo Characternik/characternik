@@ -1,16 +1,9 @@
-ХАРАКТЕРНИК — ГОТОВЫЙ САЙТ
+Сайт «Характерник» — обновление 16.11.2026
 
 1. Распакуйте ZIP.
-2. Откройте index.html двойным кликом для проверки сайта.
-3. На GitHub откройте репозиторий kharakternyk.
-4. Нажмите Add file -> Upload files.
-5. Перетащите index.html и папку assets (с emblem.webp).
-6. Нажмите Commit changes.
-7. Settings -> Pages -> Deploy from a branch -> main / (root) -> Save.
-8. Откройте https://ВАШ-ЛОГИН.github.io/kharakternyk/
+2. В репозитории github.com/Characternik/characternik откройте Code → Add file → Upload files.
+3. Загрузите index.html и содержимое папки assets (папка должна сохраниться как assets).
+4. Нажмите Commit changes.
+5. Проверьте https://characternik.github.io/characternik/
 
-В этом компактном архиве эмблема визуально сохранена, но файл изображения
-оптимизирован в WebP, чтобы скачивание было проще.
-
-Адреса донатов пока не добавлены, QR и копирование неактивны.
-Не публикуйте приватные ключи и seed-фразы.
+Статистика пока не подключена к живой базе, криптокошельки пока пустые.

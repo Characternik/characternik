@@ -23,7 +23,282 @@
     @media(max-width:800px){.nav{height:69px}.menu-button{display:block}.nav-links{display:none;position:absolute;top:69px;left:0;right:0;padding:15px 22px 24px;background:#0b0d0b;border-bottom:1px solid var(--hair);box-shadow:0 18px 25px #0008;flex-direction:column;align-items:stretch;gap:4px}.nav-links.open{display:flex}.nav-links a{font-size:12px;padding:12px 6px}.nav-links .nav-join{text-align:center;margin-top:6px}.hero{padding:110px 0 65px;min-height:unset}.hero-grid{grid-template-columns:1fr;gap:10px;min-height:unset}.hero-copy{order:2;text-align:center}.hero .eyebrow,.hero-foot{justify-content:center}.hero h1{font-size:clamp(58px,13vw,96px);margin:15px 0}.hero-intro{margin:auto}.hero .actions{justify-content:center}.hero-art{order:1}.hero-art img{width:min(100%,420px)}.hero-foot{margin-top:25px}section{padding:75px 0}.section-heading{display:block}.section-heading .lead{margin-top:15px}.three{grid-template-columns:1fr 1fr}.donate-shell{grid-template-columns:1fr}.good-panel{grid-template-columns:1fr}.good-panel .mark{display:none}}
     @media(max-width:560px){.container{padding:0 18px}.identity img{width:41px;height:41px}.identity strong{font-size:17px}.identity small{font-size:8px}.hero{padding-top:104px}.hero-art img{width:min(98%,330px)}.hero h1{font-size:clamp(58px,14vw,78px)}.eyebrow{font-size:9px;letter-spacing:.2em}.btn{width:100%;min-height:49px}.three,.two{grid-template-columns:1fr}.card{min-height:unset}.good-panel{padding:25px}.donate-shell{padding:20px}.wallet-display{grid-template-columns:1fr}.qr-box{width:150px}.wallet-actions .btn{width:100%}.report-stats{grid-template-columns:1fr}.report-top{display:block}.report-table{min-width:500px}.join-panel{padding:42px 22px}.foot-grid{display:block}.foot-grid p+p{margin-top:10px}.mission{grid-template-columns:45px 1fr;gap:10px}.mission .mission-index{font-size:30px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-art img,.hero-art .halo{animation:none!important}.reveal{opacity:1;transform:none;transition:none}.btn,.to-top{transition:none}}
-  </style>
+  
+/* === ХАРАКТЕРНИК / НОВА ЗАСТАВКА · ВАРІАНТ 2 === */
+.hero-redesign{min-height:min(825px,100svh);padding:126px 0 68px;background:radial-gradient(ellipse 43% 60% at 26% 45%,rgba(171,111,47,.14),transparent 74%),radial-gradient(ellipse 45% 60% at 82% 28%,rgba(75,65,45,.17),transparent 72%),linear-gradient(130deg,#0d100e 0%,#080a09 54%,#13110e 100%)}
+.hero-redesign::before{background:linear-gradient(90deg,transparent 0%,rgba(205,154,75,.06) 49.9%,transparent 50.1%),radial-gradient(ellipse 55% 90% at 17% 42%,rgba(184,132,59,.12),transparent 74%);z-index:-1}
+.hero-redesign::after{opacity:.13;background-image:linear-gradient(90deg,rgba(194,151,84,.18) 1px,transparent 1px),linear-gradient(rgba(194,151,84,.12) 1px,transparent 1px);background-size:98px 98px;mask-image:linear-gradient(90deg,#000,transparent 78%)}
+.hero-redesign .hero-grid{grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:clamp(30px,5vw,88px);align-items:center;min-height:605px}
+.hero-redesign .hero-copy{padding:20px 0 40px;max-width:590px}
+.hero-redesign h1{font-size:clamp(53px,5.5vw,79px);line-height:1.04;letter-spacing:-.025em;text-transform:none;margin:18px 0 24px}
+.hero-redesign h1 span{display:block;color:var(--gold-light);font-size:.93em;margin-top:4px}
+.hero-redesign .hero-eyebrow{font-size:10px;letter-spacing:.22em;color:#dfb876}
+.hero-redesign .hero-kicker{margin-top:21px;color:#9e9c8d;font-weight:800;font-size:10px;letter-spacing:.26em}
+.hero-redesign .hero-intro{max-width:510px;font-size:16px;line-height:1.85;color:#c8bda9}
+.hero-redesign .hero-actions{margin-top:29px}
+.hero-redesign .hero-foot{margin-top:32px;color:#b9a88d;font-size:9px;letter-spacing:.2em}
+.hero-redesign .hero-art{min-height:520px;position:relative}
+.hero-redesign .hero-art img{width:min(100%,535px);max-width:100%;height:auto;border-radius:50%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 30px 32px rgba(0,0,0,.57));animation:float 8s ease-in-out infinite}
+.hero-redesign .hero-orbit{position:absolute;inset:1%;border:1px solid rgba(224,184,115,.23);border-radius:50%;box-shadow:0 0 85px rgba(170,109,49,.11),inset 0 0 75px rgba(173,116,44,.07);pointer-events:none}
+.hero-redesign .hero-orbit:before{content:"";position:absolute;inset:4%;border:1px dashed rgba(229,183,109,.12);border-radius:50%}
+.hero-redesign .art-caption{position:absolute;bottom:-5px;left:0;right:0;text-align:center;white-space:nowrap;font-size:9px;letter-spacing:.29em;color:#c5aa7d;font-weight:800}
+.hero-redesign .art-caption span{padding:0 9px;color:#dbaf6d}
+.hero-ornament{position:absolute;z-index:0;top:51%;color:rgba(230,180,107,.38);font-size:31px;pointer-events:none}
+.hero-ornament-left{left:clamp(12px,3vw,60px)}.hero-ornament-right{right:clamp(12px,3vw,60px)}
+.scroll-cue{position:absolute;bottom:19px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.22em;color:#998a73;display:flex;gap:10px;align-items:center;white-space:nowrap}
+.scroll-cue span{font-size:16px;color:#c79f64;animation:scrollBeat 2s ease-in-out infinite}
+@keyframes scrollBeat{50%{transform:translateY(5px)}}
+.principles{background:linear-gradient(90deg,#111611,#15130f,#111611);border-bottom:1px solid var(--hair)}
+.principles-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.principle{display:flex;align-items:center;gap:15px;min-height:110px;padding:20px 24px 20px 0;position:relative}
+.principle+.principle{padding-left:26px;border-left:1px solid rgba(221,174,103,.17)}
+.principle-num{align-self:center;font:600 32px/1 'Cormorant Garamond',Georgia,serif;color:#aa824d}
+.principle strong{font-size:13px;color:#f1dcc0;display:block;white-space:nowrap}
+.principle small{font-size:11px;color:#9b9283;display:block;margin-top:3px}
+.principle-arrow{font-size:18px;color:#b5894b;margin-left:auto;transition:transform .2s ease}
+.principle:hover .principle-arrow{transform:translate(3px,-3px)}
+.principle:hover strong{color:#ffe3b5}
+@media(max-width:1100px){.hero-redesign h1{font-size:clamp(48px,5.4vw,65px)}.hero-redesign .hero-art{min-height:470px}.principle{gap:10px}.principle strong{font-size:12px}}
+@media(max-width:800px){
+  .hero-redesign{min-height:auto;padding:100px 0 65px}
+  .hero-redesign .hero-grid{grid-template-columns:1fr;gap:12px;min-height:auto}
+  .hero-redesign .hero-art{order:0;min-height:0;width:min(75vw,390px);margin:15px auto 0}
+  .hero-redesign .hero-art img{width:100%}
+  .hero-redesign .hero-copy{order:1;max-width:650px;margin:auto;text-align:center;padding:10px 0 20px}
+  .hero-redesign .eyebrow,.hero-redesign .hero-foot{justify-content:center}
+  .hero-redesign h1{font-size:clamp(48px,8vw,70px);margin:15px 0}
+  .hero-redesign .hero-kicker{margin-top:10px}
+  .hero-redesign .hero-intro{margin:auto}
+  .hero-redesign .hero-actions{justify-content:center}
+  .hero-redesign .hero-foot{margin-top:24px}
+  .hero-redesign .art-caption{bottom:-8px}
+  .hero-ornament{display:none}.scroll-cue{bottom:13px}
+  .principles-grid{grid-template-columns:1fr}
+  .principle,.principle+.principle{padding:17px 6px;min-height:83px;border-left:0;border-bottom:1px solid rgba(221,174,103,.12)}
+  .principle:last-child{border-bottom:0}
+}
+@media(max-width:560px){
+  .hero-redesign{padding:93px 0 60px}
+  .hero-redesign .hero-art{width:min(74vw,295px);margin:8px auto 0}
+  .hero-redesign .hero-copy{padding:4px 0 25px}
+  .hero-redesign h1{font-size:clamp(43px,10.5vw,57px);line-height:1.02}
+  .hero-redesign h1 span{font-size:.91em}
+  .hero-redesign .hero-kicker{font-size:8px;letter-spacing:.19em}
+  .hero-redesign .hero-intro{font-size:13px;line-height:1.8}
+  .hero-redesign .hero-eyebrow{font-size:9px}
+  .hero-redesign .hero-actions{margin-top:25px}
+  .hero-redesign .hero-foot{font-size:8px}
+  .hero-redesign .art-caption{font-size:7px;letter-spacing:.2em}
+  .scroll-cue{font-size:8px}
+  .principle{min-height:78px}.principle strong{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){.scroll-cue span{animation:none!important}}
+
+
+/* === ГОРИЗОНТАЛЬНА ПАНОРАМНА ЗАСТАВКА · ЛІС І ЗОЛОТА СОВА === */
+:root{--gold:#d8a860;--gold-light:#f7deb0}
+.hero.hero-landscape{background:#07171e;padding:77px 0 0;min-height:0;border-bottom:1px solid rgba(218,171,95,.3);position:relative;isolation:isolate;overflow:hidden}
+.hero-landscape:before,.hero-landscape:after{display:none!important}
+.landscape-stage{position:relative;isolation:isolate;width:100%;height:clamp(620px,57vw,830px);display:flex;align-items:center;overflow:hidden}
+.landscape-visual{position:absolute;inset:0;z-index:-2;margin:0;background:#0b2630}
+.landscape-visual img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 45%;filter:saturate(1.04) contrast(1.03);animation:forest-reveal 1.3s ease-out both}
+.landscape-stage:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(4,18,24,.97) 0%,rgba(4,18,24,.9) 19%,rgba(4,18,24,.74) 32%,rgba(4,18,24,.35) 51%,rgba(4,18,24,.02) 75%),linear-gradient(0deg,rgba(3,13,16,.7),transparent 22%,transparent 70%,rgba(3,13,16,.16))}
+.landscape-stage:after{content:"";position:absolute;inset:20px;pointer-events:none;border:1px solid rgba(216,170,98,.17);z-index:0}
+.landscape-content{width:100%;max-width:1280px;margin:0 auto;padding:45px clamp(24px,6vw,84px) 76px;position:relative;z-index:1}
+.landscape-copy{max-width:565px;text-shadow:0 2px 16px rgba(0,0,0,.2)}
+.landscape-eyebrow{display:flex;align-items:center;gap:16px;color:#f2c77e;font-size:10px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;margin:0 0 34px}
+.landscape-eyebrow:before{content:"";display:block;width:39px;height:1px;background:#e0ae66}
+.hero-landscape h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;line-height:1.0;letter-spacing:.025em;font-size:clamp(62px,5.2vw,88px);margin:0 0 16px;color:#fff0d0;text-transform:uppercase}
+.hero-landscape h1 span{display:block;font-size:.73em;line-height:1.14;letter-spacing:.002em;font-weight:600;color:#d7a969;text-transform:none;margin-top:12px}
+.landscape-intro{font-size:15px;line-height:1.95;max-width:470px;color:#e0dfd4;margin:25px 0 34px}
+.landscape-actions{display:flex;flex-wrap:wrap;gap:13px;margin-top:31px}
+.hero-landscape .btn-primary{background:linear-gradient(105deg,#b98546,#efd096 58%,#b98445);color:#13160f;box-shadow:0 15px 35px #0004}
+.hero-landscape .btn-secondary{border-color:rgba(231,184,114,.55);color:#f6e2bd;background:rgba(5,21,27,.66);backdrop-filter:blur(6px)}
+.hero-landscape .btn{transition:transform .2s,filter .2s}
+.hero-landscape .btn:hover{transform:translateY(-3px);filter:brightness(1.08)}
+.landscape-legend{position:absolute;bottom:37px;left:clamp(24px,6vw,84px);display:flex;align-items:center;gap:17px;letter-spacing:.22em;font-weight:800;font-size:9px;color:#e1c291}
+.landscape-legend span{opacity:.72}.landscape-legend b{font-size:15px;font-weight:500}
+.landscape-scroll{position:absolute;bottom:32px;right:clamp(30px,6vw,84px);display:flex;align-items:center;gap:10px;letter-spacing:.24em;font-size:9px;font-weight:800;color:#f2d69f}
+.landscape-scroll span{font-size:20px;animation:scrollBeat 2s ease-in-out infinite}
+@keyframes forest-reveal{from{opacity:.4;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
+@media(min-width:1600px){.landscape-visual img{object-position:center 43%}.landscape-stage{height:790px}}
+@media(max-width:1050px){.landscape-stage{height:680px}.landscape-content{padding-left:36px;padding-right:36px}.landscape-copy{max-width:480px}.hero-landscape h1{font-size:clamp(60px,6.2vw,76px)}.landscape-intro{max-width:420px}.landscape-legend{left:36px}.landscape-scroll{right:36px}}
+@media(max-width:800px){
+.hero.hero-landscape{padding-top:69px}
+.landscape-stage{display:flex;flex-direction:column;height:auto;align-items:stretch;overflow:visible;background:linear-gradient(180deg,#071e29 0%,#08151b 75%,#10130f)}
+.landscape-visual{position:relative;inset:auto;z-index:auto;width:100%;aspect-ratio:1586/992;max-height:none;overflow:hidden;background:#08202b;border-bottom:1px solid rgba(207,163,90,.3)}
+.landscape-visual img{width:100%;height:100%;object-fit:contain;object-position:center;filter:none}
+.landscape-stage:before{display:none}
+.landscape-stage:after{inset:10px 10px auto;height:calc(100vw * .625 - 20px);border-color:rgba(225,183,109,.22)}
+.landscape-content{padding:43px 24px 79px;max-width:640px;text-align:center}
+.landscape-copy{max-width:100%;margin:0 auto}
+.landscape-eyebrow{justify-content:center;letter-spacing:.19em;font-size:9px;margin-bottom:20px}
+.landscape-eyebrow:before{width:24px}
+.hero-landscape h1{font-size:clamp(46px,9vw,75px);margin-bottom:15px;letter-spacing:.015em}
+.hero-landscape h1 span{font-size:.75em;margin-top:4px}
+.landscape-intro{margin:15px auto 25px;font-size:14px;line-height:1.75}
+.landscape-actions{justify-content:center;margin-top:18px}
+.landscape-legend{bottom:33px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:8px;gap:10px;letter-spacing:.12em}
+.landscape-scroll{display:none}
+}
+@media(max-width:480px){.landscape-content{padding:32px 18px 73px}.landscape-eyebrow{font-size:8px;letter-spacing:.12em;gap:8px}.landscape-eyebrow:before{width:19px}.hero-landscape h1{font-size:clamp(43px,11vw,57px)}.landscape-intro{font-size:13px}.landscape-actions{flex-direction:column;align-items:stretch;gap:10px}.landscape-actions .btn{width:100%;justify-content:center}.landscape-legend{bottom:26px}}
+@media(prefers-reduced-motion:reduce){.landscape-visual img{animation:none}.landscape-scroll span{animation:none}}
+
+/* Компактна емблема в хедері: чорний квадрат зникає, золото залишається.
+   Оригінальний файл емблеми не змінено. */
+.identity img{
+  width:53px;height:53px;object-fit:cover;box-shadow:none;
+  border-radius:50%;mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(circle,#000 0%,#000 72%,rgba(0,0,0,.78) 84%,transparent 100%);
+  mask-image:radial-gradient(circle,#000 0%,#000 72%,rgba(0,0,0,.78) 84%,transparent 100%);
+  filter:contrast(1.12) saturate(1.08);
+}
+/* Тиха статистика ліворуч під емблемою — без великих карток */
+.kh-stats-pocket{
+  position:absolute;top:21px;left:max(24px,calc((100vw - 1170px)/2 + 26px));
+  z-index:8;max-width:calc(100% - 48px);font-family:Manrope,Arial,sans-serif;
+}
+.kh-mini-stats{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.kh-mini-stat{min-height:30px;display:inline-flex;align-items:center;gap:6px;
+  padding:4px 9px 4px 7px;color:rgba(237,226,205,.79);font-size:10px;
+  border:1px solid transparent;border-radius:7px;white-space:nowrap;
+  background:rgba(4,16,20,.2);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  font-variant-numeric:tabular-nums;
+}
+.kh-mini-stat svg{width:13px;height:13px;fill:none;stroke:rgba(219,182,124,.77);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.kh-mini-num{font-weight:800;font-size:11px;letter-spacing:.01em;color:rgba(242,225,194,.92)}
+.kh-mini-caption{font-size:9px;letter-spacing:.01em;color:rgba(228,225,212,.73)}
+.kh-mini-stat.online .kh-mini-status{display:none;width:5px;height:5px;flex:0 0 5px;border-radius:50%;background:#8abda2;box-shadow:0 0 5px rgba(138,189,162,.28)}
+.kh-stats-pocket[data-loaded="true"] .kh-mini-stat.online .kh-mini-status{display:inline-block}
+.kh-mini-people{cursor:pointer;appearance:none;font:inherit;transition:background .2s,border-color .2s}
+.kh-mini-people:hover,.kh-mini-people[aria-expanded="true"]{background:rgba(15,33,36,.73);border-color:rgba(221,174,103,.23)}
+.kh-mini-people svg.kh-chevron{width:9px;height:9px;opacity:.7;transition:transform .2s}
+.kh-mini-people[aria-expanded="true"] svg.kh-chevron{transform:rotate(180deg)}
+.kh-member-panel[hidden]{display:none}
+.kh-member-panel{
+  position:absolute;top:39px;left:0;width:min(330px,calc(100vw - 38px));
+  border:1px solid rgba(218,174,105,.26);border-radius:10px;
+  background:rgba(7,19,23,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 18px 50px rgba(0,0,0,.42);padding:19px 20px 16px;color:#f0e4d0;
+}
+.kh-member-panel h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:25px;font-weight:600;margin:0 0 8px;color:#f6dca7}
+.kh-member-panel p{font-size:11px;line-height:1.7;color:#c2b9a6}
+.kh-member-panel ul{list-style:none;padding:0;margin:13px 0 8px;max-height:190px;overflow:auto}
+.kh-member-panel li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid rgba(220,180,106,.13);font-size:12px}
+.kh-member-panel li small{font-size:10px;color:#baa780}
+.kh-member-panel .kh-panel-note{margin-top:11px;padding-top:10px;border-top:1px solid rgba(220,180,106,.15);font-size:10px;color:#a9a99f}
+@media(max-width:1050px){.kh-stats-pocket{left:36px}}
+@media(max-width:800px){.kh-stats-pocket{top:13px;left:18px;max-width:calc(100% - 36px)}
+  .kh-mini-stats{gap:1px}.kh-mini-stat{min-height:28px;padding:3px 7px 3px 5px;gap:4px}
+  .kh-mini-num{font-size:10px}.kh-mini-caption{font-size:8px}.kh-mini-stat svg{width:12px;height:12px}}
+@media(max-width:380px){.kh-mini-caption{font-size:8px}.kh-mini-stat{padding:3px 5px}.kh-mini-stats{gap:0}}
+@media(prefers-reduced-motion:reduce){.kh-mini-people,.kh-mini-people svg.kh-chevron{transition:none}}
+
+
+/* Зала братства: камерна панель профілів, без вигаданих реальних учасників. */
+.kh-member-panel{
+  width:min(414px,calc(100vw - 34px));padding:0;max-height:min(76svh,704px);
+  border-radius:14px;overflow:hidden;color:#efe5d1;box-shadow:0 24px 80px rgba(0,0,0,.63),0 0 0 1px #e1b36f10;
+  background:linear-gradient(155deg,rgba(17,33,33,.99),rgba(8,17,19,.99) 52%,rgba(13,18,16,.99));
+  animation:khDirectoryIn .23s ease-out;transform-origin:top left;
+}
+@keyframes khDirectoryIn{from{opacity:0;transform:translateY(-8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.kh-directory-top{padding:20px 20px 16px;background:radial-gradient(ellipse 70% 100% at 100% 0,rgba(183,137,63,.14),transparent 72%);border-bottom:1px solid rgba(219,168,95,.2)}
+.kh-directory-bar{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.kh-directory-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:.24em;font-weight:800;color:#bc9e6e;display:flex;align-items:center;gap:8px}
+.kh-directory-eyebrow:before{content:"";height:1px;width:18px;background:#c09b61}
+.kh-member-panel .kh-directory-title{font:600 31px/1.06 'Cormorant Garamond',Georgia,serif;letter-spacing:.01em;color:#f8e8c9;margin:8px 0 5px}
+.kh-member-panel .kh-directory-intro{font-size:11px;line-height:1.65;color:#b8bdaf;max-width:320px}
+.kh-directory-close{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border:1px solid rgba(223,180,109,.28);border-radius:50%;background:rgba(0,0,0,.24);color:#e8d4ad;font-size:18px;line-height:1;cursor:pointer}
+.kh-directory-close:hover{border-color:#e9c17e;background:#44331d}
+.kh-directory-tools{display:flex;align-items:center;gap:9px;padding:14px 19px 12px}
+.kh-search{display:flex;align-items:center;gap:8px;flex:1;padding:0 11px;min-width:0;height:37px;border:1px solid rgba(207,165,98,.23);border-radius:7px;background:rgba(0,0,0,.23);color:#b9aa92}
+.kh-search svg{flex:0 0 15px;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7}
+.kh-search input{min-width:0;width:100%;border:0;outline:0;background:none;font:500 11px Manrope,Arial,sans-serif;color:#f8e9ca}
+.kh-search input::placeholder{color:#a29c8b}
+.kh-directory-count{white-space:nowrap;font-size:10px;color:#ccb080;font-weight:700}
+.kh-demo-notice{display:flex;align-items:center;gap:8px;margin:0 19px 11px;padding:8px 10px;border:1px solid rgba(230,181,97,.33);border-radius:5px;background:rgba(138,102,44,.16);font-size:9px;line-height:1.45;color:#f4d6a5;letter-spacing:.02em}
+.kh-directory-list{list-style:none!important;padding:0 19px 2px!important;margin:0!important;max-height:min(39svh,340px)!important;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#6d5737 transparent}
+.kh-member-panel .kh-member-row{display:flex;align-items:center;gap:11px;padding:11px 9px;margin-bottom:7px;border:1px solid rgba(230,182,105,.14);border-radius:9px;background:linear-gradient(100deg,rgba(209,156,79,.065),rgba(6,17,19,.4));font-size:inherit}
+.kh-member-panel .kh-member-row:first-child{border-top:1px solid rgba(230,182,105,.14)}
+.kh-member-avatar{height:43px;width:43px;flex:0 0 43px;display:grid;place-items:center;border:1px solid rgba(224,176,96,.45);border-radius:50%;box-shadow:0 0 0 3px rgba(203,153,77,.065);background:radial-gradient(circle at 30% 20%,#6e5a35,#17231e 70%);font:700 17px/1 'Cormorant Garamond',Georgia,serif;color:#f6ddb0;overflow:hidden}
+.kh-member-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.kh-member-profile{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.kh-member-name{font-size:12px;color:#f3e5cb;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.kh-member-sub{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.kh-member-id{font-size:9px;color:#b7ad9c;letter-spacing:.08em}
+.kh-rank{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border:1px solid rgba(222,172,99,.22);border-radius:3px;background:rgba(210,153,68,.08);color:#d9bb8d;font:800 9px Manrope,Arial,sans-serif;letter-spacing:.045em}
+.kh-rank-seek{color:#b2bcac;border-color:#76958050;background:#75907716}
+.kh-rank-brother{color:#e1c99c}
+.kh-rank-master{color:#f4d488;border-color:#e0b75b65;background:#c69a4b20}
+.kh-rank-crest{width:27px;height:31px;flex:0 0 27px;display:grid;place-items:center;color:#d1ac6b;font-size:17px;opacity:.78;clip-path:polygon(50% 0,100% 18%,96% 76%,50% 100%,4% 76%,0 18%);background:linear-gradient(150deg,#6e532b99,#2b291e88)}
+.kh-empty-directory{text-align:center;padding:25px 19px 17px;color:#aaac9e}
+.kh-empty-directory .kh-empty-mark{width:53px;height:53px;display:grid;place-items:center;margin:0 auto 8px;border:1px solid rgba(225,183,113,.25);border-radius:50%;font:600 30px Georgia,serif;color:#b69361;background:rgba(255,255,255,.025)}
+.kh-member-panel .kh-empty-directory p{font-size:11px;color:#b2b4ab;max-width:255px;margin:auto}
+.kh-directory-bottom{padding:12px 19px 15px;border-top:1px solid rgba(224,183,107,.13);display:flex;flex-direction:column;gap:9px;background:rgba(2,8,10,.22)}
+.kh-directory-action{background:none;border:1px solid rgba(205,159,92,.35);border-radius:5px;padding:8px 13px;cursor:pointer;font:700 10px Manrope,Arial,sans-serif;color:#e4c38a;letter-spacing:.05em;align-self:start;transition:background .18s}
+.kh-directory-action:hover{background:rgba(207,157,82,.17)}
+.kh-member-panel .kh-directory-footnote{font-size:9px;line-height:1.6;color:#acb0a4;margin:0}
+.kh-member-panel .kh-panel-note{margin:0;padding:0;border:0;color:#a9aa9f;font-size:9px}
+@media(max-width:800px){
+ .kh-member-panel{position:fixed;top:80px;left:14px;right:14px;width:auto;max-height:calc(100dvh - 96px);overflow-y:auto;overscroll-behavior:contain}
+ .kh-directory-list{max-height:min(41svh,360px)!important}
+}
+@media(max-width:420px){.kh-member-panel{width:auto;left:12px;right:12px}.kh-directory-top{padding:17px 15px 15px}.kh-directory-tools{padding:12px 15px}.kh-directory-list{padding:0 15px 1px!important}.kh-directory-bottom{padding:12px 15px}.kh-demo-notice{margin:0 15px 11px}}
+@media(prefers-reduced-motion:reduce){.kh-member-panel{animation:none}.kh-directory-action{transition:none}}
+
+
+/* Профіль засновника «ГАРТ» №001 — головний шеврон без стилістичних змін */
+.kh-founder-row{padding:0!important;border-color:rgba(231,183,102,.47)!important;background:linear-gradient(105deg,rgba(180,126,47,.22),rgba(8,20,21,.65))!important;box-shadow:inset 0 0 25px #d4a15310}
+.kh-founder-trigger{border:0;background:transparent;padding:10px;display:flex;align-items:center;gap:11px;width:100%;text-align:left;color:inherit;cursor:pointer;border-radius:9px;font:inherit;transition:background .22s}
+.kh-founder-trigger:hover,.kh-founder-trigger:focus-visible{background:#e2ad4a16;outline:2px solid transparent}
+.kh-founder-trigger:focus-visible{box-shadow:0 0 0 2px #eccb8f}
+.kh-founder-row .kh-member-avatar{width:51px;height:51px;flex-basis:51px;border-color:#e9c47d;background:#0b0c0a}
+.kh-founder-row .kh-member-name{color:#ffdda0;font-size:14px;letter-spacing:.075em}
+.kh-founder-row .kh-founder-tag{font-size:9px;color:#f4d299;letter-spacing:.08em;display:inline-flex;align-items:center;gap:5px}
+.kh-founder-row .kh-rank-crest{background:linear-gradient(160deg,#a17a39,#302718);color:#ffe3a5;opacity:1;font-size:18px}
+.kh-founder-row .kh-founder-link{font-size:9px;color:#ddc395;letter-spacing:.05em;margin-top:4px}
+.kh-founder-overlay[hidden]{display:none!important}
+.kh-founder-overlay{position:fixed;inset:0;z-index:1100;background:rgba(2,7,10,.83);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;animation:khFoundFade .2s ease-out}
+@keyframes khFoundFade{from{opacity:0}to{opacity:1}}
+.kh-founder-dialog{width:min(930px,100%);position:relative;isolation:isolate;overflow:auto;max-height:calc(100dvh - 40px);background:linear-gradient(145deg,rgba(11,23,24,.94),rgba(5,11,15,.98));border:1px solid #d4a45a6c;box-shadow:0 25px 100px #000d,0 0 45px #d4a15319;border-radius:16px;color:#f3e5c8}
+.kh-founder-bg{position:absolute;inset:0;z-index:-2;background:#070e11 url('assets/founder-card-bg.webp') center center/cover no-repeat;opacity:.67;pointer-events:none}
+.kh-founder-dialog:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,11,14,.16),rgba(5,12,14,.5) 50%,rgba(5,12,14,.88)),linear-gradient(0deg,#071014 0%,#07101438 50%,#07101470 100%);pointer-events:none}
+.kh-founder-close{position:sticky;top:12px;float:right;z-index:3;margin:12px 14px 0 0;background:rgba(6,13,16,.83);color:#f8dfb5;border:1px solid #e4ba7566;box-shadow:0 3px 18px #0006;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:24px;line-height:1;display:grid;place-items:center}
+.kh-founder-close:hover,.kh-founder-close:focus-visible{background:#3c2e1c;outline-color:#e6bd75}
+.kh-founder-inner{padding:37px 40px 39px;clear:both}
+.kh-founder-overline{display:flex;align-items:center;gap:10px;color:#efc681;text-transform:uppercase;letter-spacing:.22em;font-size:10px;font-weight:800;margin:0 0 23px}
+.kh-founder-overline:before{content:'';width:31px;height:1px;background:#e4b66a}
+.kh-founder-layout{display:grid;grid-template-columns:minmax(230px,340px) 1fr;gap:clamp(22px,4vw,48px);align-items:center}
+.kh-founder-crest{display:block;width:100%;max-width:340px;height:auto;aspect-ratio:1/1;object-fit:contain;object-position:center;background:transparent;border:0;border-radius:0;box-shadow:none;filter:drop-shadow(0 20px 28px rgba(0,0,0,.58))}
+.kh-founder-crest-label{display:block;font-size:10px;color:#d5c19e;letter-spacing:.13em;text-transform:uppercase;margin-top:8px;text-align:center}
+.kh-founder-num{font-size:11px;font-weight:800;color:#ffda97;letter-spacing:.24em;text-transform:uppercase;margin-bottom:6px}
+.kh-founder-title{font:600 clamp(60px,7vw,93px)/.92 'Cormorant Garamond',Georgia,serif;color:#ffedc7;letter-spacing:.055em;margin:0 0 12px}
+.kh-founder-position{font-size:15px;color:#efd19a;font-weight:700;margin:0 0 22px;letter-spacing:.07em}
+.kh-founder-quote{font:italic 500 clamp(22px,2.5vw,29px)/1.3 'Cormorant Garamond',Georgia,serif;color:#f1d7a9;border-left:2px solid #e2b56d;padding:3px 0 3px 17px;margin:25px 0 18px}
+.kh-founder-tags{display:flex;flex-wrap:wrap;gap:8px;margin:17px 0 0}
+.kh-founder-tags span{border:1px solid #d6aa6559;background:#b48b481a;color:#ebd4ac;font-size:10px;padding:7px 10px;border-radius:25px}
+.kh-founder-story{margin-top:29px;border-top:1px solid #cda66a4a;padding-top:23px;display:grid;grid-template-columns:185px 1fr;gap:25px}
+.kh-founder-story h3{font:600 30px/1.07 'Cormorant Garamond',Georgia,serif;color:#f8ddaa;margin:0}
+.kh-founder-story p{color:#d7d2c5;font-size:12px;line-height:1.85;margin:0 0 10px}
+.kh-founder-foot{font-size:10px;letter-spacing:.08em;color:#aeb6aa;margin-top:14px}
+body.kh-founder-lock{overflow:hidden}
+@media(max-width:740px){.kh-founder-overlay{padding:10px;align-items:flex-start}.kh-founder-dialog{max-height:calc(100dvh - 20px)}.kh-founder-inner{padding:11px 21px 26px}.kh-founder-layout{grid-template-columns:1fr;gap:14px}.kh-founder-crest{max-width:235px;display:block;margin:auto}.kh-founder-title{font-size:67px}.kh-founder-overline{margin-bottom:12px}.kh-founder-story{grid-template-columns:1fr;gap:9px;margin-top:19px;padding-top:16px}.kh-founder-quote{margin:15px 0;font-size:25px}.kh-founder-tags{margin-top:12px}.kh-founder-close{top:9px;margin:9px 9px 0 0}}
+@media(max-width:400px){.kh-founder-inner{padding:8px 16px 23px}.kh-founder-crest{max-width:195px}.kh-founder-title{font-size:58px}.kh-founder-position{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){.kh-founder-overlay{animation:none}.kh-founder-trigger{transition:none}}
+
+
+/* Шеврон повністю: не обрізати золотий кант та напис унизу */
+.kh-founder-row .kh-member-avatar{overflow:hidden;display:grid;place-items:center}
+.kh-founder-row .kh-member-avatar img{width:100%;height:100%;object-fit:contain;object-position:center;border-radius:0}
+.kh-founder-layout>div:first-child{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.kh-founder-story p{font-size:clamp(12px,1.05vw,13.4px);line-height:1.8}
+.kh-founder-story p+p{margin-top:10px}
+.kh-founder-story .kh-founder-foot{font-size:10px;margin-top:15px}
+@media(max-width:740px){.kh-founder-crest{max-width:225px}.kh-founder-story p{font-size:12px}.kh-founder-story h3{font-size:29px}}
+@media(max-width:400px){.kh-founder-crest{max-width:197px}}
+
+</style>
 </head>
 <body>
   <a class="screen-reader" href="#main">Перейти до основного вмісту</a>
@@ -33,10 +308,73 @@
     <nav class="nav-links" id="navLinks" aria-label="Навігація сайтом"><a href="#brotherhood">Братство</a><a href="#ranks">Ранги</a><a href="#missions">Випробування</a><a href="#deeds">Добрі справи</a><a href="#merch">Мерч</a><a href="#donate">Донати</a><a class="nav-join" href="#join">Приєднатися</a></nav>
   </div></header>
   <main id="main">
-    <section class="hero" id="home"><div class="container hero-grid">
-      <div class="hero-copy"><div class="eyebrow">Братство · Саморозвиток · Взаємодопомога</div><h1>СИЛА <span>В ЄДНОСТІ</span></h1><p class="hero-intro">«Характерник» — спільнота тих, хто прагне стати сильнішим духом, розвиватися, підтримувати своїх і змінювати світ добрими вчинками.</p><div class="actions"><a class="btn btn-primary" href="#join">Приєднатися до братства <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="#brotherhood">Дізнатися більше <span aria-hidden="true">↓</span></a></div><div class="hero-foot">Честь · Дисципліна · Вірність слову</div></div>
-      <div class="hero-art" aria-label="Оригінальна емблема спільноти Характерник"><div class="halo" aria-hidden="true"></div><img src="assets/emblem.webp" alt="Емблема Характерник: золота сова з розкритими крилами, тризуб над головою та горизонтальний ключ у лапах"><span class="corner" aria-hidden="true">✧</span><span class="corner" aria-hidden="true">✧</span></div>
-    </div></section>
+    <section class="hero hero-landscape" id="home" aria-labelledby="heroTitle">
+  <div class="landscape-stage">
+    <figure class="landscape-visual">
+      <img src="assets/hero-forest.webp" width="1586" height="992" fetchpriority="high" alt="Панорама Карпатських гір і туманного лісу на світанку. Праворуч — золотий символ спільноти Характерник: сова, ключ і тризуб.">
+    </figure>
+    <!-- Непомітні лічильники під логотипом. Дані тільки з підключеного джерела. -->
+    <aside class="kh-stats-pocket" id="community-stats" aria-label="Статистика спільноти" data-loaded="false">
+      <div class="kh-mini-stats" role="group" aria-label="Відвідуваність і учасники">
+        <span class="kh-mini-stat online" title="Орієнтовно: активні сеанси за останні дві хвилини">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="kh-mini-status" aria-hidden="true"></span>
+          <strong class="kh-mini-num" id="khOnline">—</strong><span class="kh-mini-caption">онлайн</span>
+        </span>
+        <button class="kh-mini-stat kh-mini-people" type="button" id="khShowMembers" aria-controls="khMembersPanel" aria-expanded="false" title="Переглянути публічний список учасників">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20"/><circle cx="9" cy="7" r="4"/><path d="M22 20v-1.5a4 4 0 0 0-3-3.88M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+          <strong class="kh-mini-num" id="khMembers">—</strong><span class="kh-mini-caption">учасників</span>
+          <svg class="kh-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <span class="kh-mini-stat" title="Перегляди після підключення системи статистики">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <strong class="kh-mini-num" id="khViews">—</strong><span class="kh-mini-caption">переглядів</span>
+        </span>
+      </div>
+      <div class="kh-member-panel" id="khMembersPanel" hidden aria-label="Зала братства — публічні профілі">
+        <div class="kh-directory-top">
+          <div class="kh-directory-bar">
+            <div><div class="kh-directory-eyebrow">Реєстр спільноти</div><h2 class="kh-directory-title">Зала братства</h2></div>
+            <button type="button" class="kh-directory-close" id="khCloseMembers" aria-label="Закрити список учасників">×</button>
+          </div>
+          <p class="kh-directory-intro">Позивні, відзнаки та номери учасників, які дозволили показати свій профіль.</p>
+        </div>
+        <div class="kh-directory-tools">
+          <label class="kh-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.6" cy="10.6" r="6.7"/><path d="m16 16 5 5"/></svg><span class="screen-reader">Знайти учасника</span><input id="khMemberSearch" type="search" placeholder="Знайти позивний або ранг" autocomplete="off" maxlength="48"></label>
+          <span class="kh-directory-count" id="khDirectoryCount">0 профілів</span>
+        </div>
+        <div class="kh-demo-notice" id="khDemoNotice" hidden>✧ Сокіл і Мандрівник — вигадані приклади. Профіль ГАРТ №001 — профіль засновника.</div>
+        <ul class="kh-directory-list" id="khPublicMembersList" aria-label="Публічний список учасників"></ul>
+        <div class="kh-empty-directory" id="khMembersEmpty"><div class="kh-empty-mark" aria-hidden="true">✦</div><p>Публічних профілів поки немає. Перші з'являться після підтвердження учасників і їхньої згоди.</p></div>
+        <div class="kh-directory-bottom">
+          <button class="kh-directory-action" type="button" id="khDemoToggle">Переглянути приклад оформлення ↗</button>
+          <p class="kh-directory-footnote">Публікуємо лише погоджені позивні, номери та аватари. Відвідувачі онлайн залишаються анонімними.</p>
+          <p class="kh-panel-note" id="khStatsNote" aria-live="polite">Статистику буде показано після підключення.</p>
+        </div>
+      </div>
+    </aside>
+    <div class="landscape-content">
+      <div class="landscape-copy">
+        <div class="landscape-eyebrow">Братство · розвиток · взаємодопомога</div>
+        <h1 id="heroTitle">Характерник<span>Сила в єдності</span></h1>
+        <p class="landscape-intro">Спільнота тих, хто гартує характер, тримає слово та підтримує своїх. Ми зростаємо разом і змінюємо світ добрими вчинками.</p>
+        <div class="landscape-actions actions">
+          <a class="btn btn-primary" href="#join">Приєднатися до братства <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-secondary" href="#brotherhood">Дізнатися більше <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="landscape-legend" aria-label="Цінності спільноти"><span>ЧЕСТЬ</span><b aria-hidden="true">✦</b><span>РОЗВИТОК</span><b aria-hidden="true">✦</b><span>ЄДНІСТЬ</span></div>
+    <a class="landscape-scroll" href="#principles">ГОРТАЙ ДАЛІ <span aria-hidden="true">↓</span></a>
+  </div>
+</section>
+<div class="principles" id="principles" aria-label="Три засади спільноти">
+  <div class="container principles-grid">
+    <a class="principle" href="#ranks"><span class="principle-num">01</span><span><strong>Гартуй характер</strong><small>Зростай щодня</small></span><span class="principle-arrow" aria-hidden="true">↗</span></a>
+    <a class="principle" href="#brotherhood"><span class="principle-num">02</span><span><strong>Підтримуй своїх</strong><small>Будь частиною братства</small></span><span class="principle-arrow" aria-hidden="true">↗</span></a>
+    <a class="principle" href="#deeds"><span class="principle-num">03</span><span><strong>Роби добро</strong><small>Допомагай справами</small></span><span class="principle-arrow" aria-hidden="true">↗</span></a>
+  </div>
+</div>
     <section id="brotherhood"><div class="container"><div class="section-heading reveal"><div><span class="eyebrow">01 / Наші цінності</span><h2 class="section-title">Братство не на словах.<br><span class="gold">Братство у вчинках.</span></h2></div><p class="lead">Ми об'єднуємо людей навколо спільних цілей, поваги, розвитку та готовності допомагати іншим.</p></div><div class="three">
       <article class="card reveal"><div class="num">01</div><h3>Єдність</h3><p>Повага, довіра і підтримка. Кожен має значення, коли ми діємо разом.</p></article>
       <article class="card reveal"><div class="num">02</div><h3>Розвиток</h3><p>Знання, дисципліна й робота над собою — щоденний шлях кожного учасника.</p></article>
@@ -59,11 +397,55 @@
   </main>
   <footer><div class="container foot-grid"><p>© <span id="year"></span> ХАРАКТЕРНИК · Сила в єдності</p><p>Створено для братства, яке починається з дій. <a href="#home">Нагору ↑</a></p></div></footer>
   <a href="#home" id="toTop" class="to-top" aria-label="Повернутися нагору">↑</a>
+
+  <!-- Власний публічний профіль засновника. №001 зарезервований, не присвоювати іншим. -->
+  <div class="kh-founder-overlay" id="khFounderModal" hidden>
+    <section class="kh-founder-dialog" role="dialog" aria-modal="true" aria-labelledby="khFounderName" aria-describedby="khFounderDesc">
+      <div class="kh-founder-bg" aria-hidden="true"></div>
+      <button type="button" class="kh-founder-close" id="khFounderClose" aria-label="Закрити профіль засновника">×</button>
+      <div class="kh-founder-inner">
+        <p class="kh-founder-overline">Перший серед побратимів · особливий профіль</p>
+        <div class="kh-founder-layout">
+          <div>
+            <img class="kh-founder-crest" src="assets/gart-001.webp" width="1024" height="1024" alt="Особистий вишитий шеврон засновника ГАРТ: золота сова з горизонтальним ключем, тризуб, №001" loading="lazy">
+            <span class="kh-founder-crest-label">Особистий шеврон · унікальна відзнака</span>
+          </div>
+          <div>
+            <p class="kh-founder-num">Реєстр братства · №001</p>
+            <h2 class="kh-founder-title" id="khFounderName">ГАРТ</h2>
+            <p class="kh-founder-position">Засновник спільноти «Характерник»</p>
+            <p class="kh-founder-quote" id="khFounderDesc">«Гартуй характер. Тримай слово. Підтримуй своїх».</p>
+            <div class="kh-founder-tags"><span>✦ Основоположник</span><span>🗝 Хранитель ідеї</span><span>№001 · назавжди</span></div>
+          </div>
+        </div>
+        <div class="kh-founder-story">
+          <h3>Ідея братства</h3>
+          <div>
+            <p>«Характерник» народився з простої ідеї: об’єднати людей, які хочуть ставати сильнішими духом, розвиватися та підтримувати одне одного. Це простір, де важливі не гучні слова чи титули, а вчинки, честь і довіра.</p>
+            <p>Шлях кожного учасника — це невеликі випробування, нові знання та добрі справи. Ми зростаємо самі й допомагаємо тим, хто поруч. Сила братства — не в кількості людей, а в тому, що ми можемо зробити разом.</p>
+            <p>ГАРТ — позивний засновника, символ загартованого характеру. <strong>№001</strong> назавжди належить йому як знак початку цієї історії. Для кожного наступного учасника відкритий власний шлях.</p>
+            <p class="kh-founder-foot">Честь · Саморозвиток · Взаємодопомога · Добрі справи</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <script>
   "use strict";
   // НАЛАШТУВАННЯ САЙТУ. Вставляйте ТІЛЬКИ публічні адреси, ніколи приватні ключі!
   const CONFIG = {
     joinUrl: "", // Наприклад, посилання-запрошення до спільноти https://t.me/...
+    // Тільки псевдоніми учасників, які погодились на публікацію.
+    // №001 зарезервований за засновником ГАРТ; для інших використовуйте №002 і далі.
+    // Формат: {nickname: "Позивний", rank: "Побратим", number: "007", avatar: "assets/avatar.webp"}.
+    // rank: "Шукач" | "Побратим" | "Характерник". avatar — необов'язкове зображення в assets/.
+    // Не додавайте дані реальних людей без їхньої згоди.
+    publicMembers: [],
+    statsBackend: {
+      supabaseUrl: "", // Project URL: https://xxxx.supabase.co
+      publishableKey: "" // ЛИШЕ sb_publishable_... з Supabase; НЕ додавайте secret key!
+    },
     wallets: {
       USDT: "", // Тільки публічна адреса Tron для USDT (TRC20)
       BTC: "",  // Тільки публічна адреса Bitcoin
@@ -72,6 +454,128 @@
     // Вносіть ТІЛЬКИ перевірені записи: {date:"2026-11-16", type:"income"|"expense", coin:"USDT", amount:"10", purpose:"...", proof:"https://..."}
     transactions: []
   };
+
+  /* Доступна модальна картка ГАРТ №001. Кнопка в реєстрі відкриває її без переходу. */
+  const founderModal=document.getElementById('khFounderModal');
+  const founderDialog=founderModal.querySelector('[role="dialog"]');
+  const founderClose=document.getElementById('khFounderClose');
+  let founderOpener=null;
+  function openFounderProfile(){
+    founderOpener=document.activeElement;
+    founderModal.hidden=false;
+    document.body.classList.add('kh-founder-lock');
+    founderClose.focus();
+  }
+  function closeFounderProfile(){
+    founderModal.hidden=true;
+    document.body.classList.remove('kh-founder-lock');
+    if(founderOpener && founderOpener.isConnected)founderOpener.focus();
+  }
+  founderClose.addEventListener('click',closeFounderProfile);
+  founderModal.addEventListener('pointerdown',event=>{if(event.target===founderModal)closeFounderProfile();});
+  document.addEventListener('keydown',event=>{
+    if(founderModal.hidden)return;
+    if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();closeFounderProfile();return;}
+    if(event.key==='Tab'){
+      const eligible=[...founderDialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled])')].filter(el=>el.getClientRects().length);
+      if(!eligible.length)return;
+      const first=eligible[0],last=eligible.at(-1);
+      if(event.shiftKey && document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey && document.activeElement===last){event.preventDefault();first.focus();}
+    }
+  });
+
+  /* Публічний каталог: вручну додані профілі не пов'язані з онлайн-лічильником.
+     Демонстрація видима лише після окремого натискання і не підмінює реальні дані. */
+  (function initMemberDirectory(){
+    const toggle=document.getElementById('khShowMembers');
+    const panel=document.getElementById('khMembersPanel');
+    const closeButton=document.getElementById('khCloseMembers');
+    const list=document.getElementById('khPublicMembersList');
+    const empty=document.getElementById('khMembersEmpty');
+    const search=document.getElementById('khMemberSearch');
+    const count=document.getElementById('khDirectoryCount');
+    const demoButton=document.getElementById('khDemoToggle');
+    const demoNotice=document.getElementById('khDemoNotice');
+    // №001 жорстко зарезервований за засновником — навіть якщо додадуть запис вручну.
+    const founderMember={nickname:'ГАРТ',rank:'Засновник',number:'001',isFounder:true};
+    const actualMembers=Array.isArray(CONFIG.publicMembers)?CONFIG.publicMembers.filter(m=>
+      m&&typeof m.nickname==='string'&&m.nickname.trim()&&String(m.number||'').replace(/^0+/, '')!=='1'
+    ):[];
+    // Усі персонажі нижче вигадані, лише для демонстрації. №001 тут немає.
+    const demoMembers=[
+      {nickname:'Сокіл',rank:'Побратим',number:'002'},
+      {nickname:'Мандрівник',rank:'Шукач',number:'003'}
+    ];
+    const ranks={'Шукач':{symbol:'⌁',css:'kh-rank-seek'},'Побратим':{symbol:'✧',css:'kh-rank-brother'},'Характерник':{symbol:'✦',css:'kh-rank-master'}};
+    let demo=false;
+    function buildMember(member){
+      if(member.isFounder){
+        const li=document.createElement('li');li.className='kh-member-row kh-founder-row';
+        const button=document.createElement('button');button.type='button';button.className='kh-founder-trigger';
+        button.setAttribute('aria-label','Відкрити особистий профіль засновника ГАРТ, номер 001');
+        const avatar=document.createElement('span');avatar.className='kh-member-avatar';
+        const img=document.createElement('img');img.src='assets/gart-001.webp';img.alt='';img.loading='lazy';avatar.append(img);
+        const profile=document.createElement('span');profile.className='kh-member-profile';
+        const name=document.createElement('strong');name.className='kh-member-name';name.textContent='ГАРТ';
+        const rank=document.createElement('span');rank.className='kh-founder-tag';rank.textContent='✦ Засновник · №001';
+        const hint=document.createElement('span');hint.className='kh-founder-link';hint.textContent='Відкрити особисту картку ↗';
+        profile.append(name,rank,hint);
+        const mark=document.createElement('span');mark.className='kh-rank-crest';mark.setAttribute('aria-hidden','true');mark.textContent='♛';
+        button.append(avatar,profile,mark);li.append(button);
+        button.addEventListener('click',openFounderProfile);
+        return li;
+      }
+      const li=document.createElement('li');li.className='kh-member-row';
+      const avatar=document.createElement('span');avatar.className='kh-member-avatar';avatar.setAttribute('aria-hidden','true');
+      const nickname=member.nickname.trim().slice(0,42);
+      const file=typeof member.avatar==='string'?member.avatar.trim():'';
+      if(/^assets\/[\w-]+\.(?:png|jpe?g|webp)$/i.test(file)){
+        const image=document.createElement('img');image.src=file;image.alt='';image.loading='lazy';
+        image.onerror=()=>{image.remove();avatar.textContent=Array.from(nickname).slice(0,2).join('').toUpperCase();};
+        avatar.append(image);
+      }else{avatar.textContent=Array.from(nickname).slice(0,2).join('').toUpperCase();}
+      const profile=document.createElement('span');profile.className='kh-member-profile';
+      const name=document.createElement('strong');name.className='kh-member-name';name.textContent=nickname;
+      const sub=document.createElement('span');sub.className='kh-member-sub';
+      const rankValue=typeof member.rank==='string'?member.rank.trim():'';
+      const rankData=ranks[rankValue]||{symbol:'◇',css:'kh-rank-seek'};
+      const rank=document.createElement('span');rank.className='kh-rank '+rankData.css;
+      const star=document.createElement('span');star.textContent=rankData.symbol;star.setAttribute('aria-hidden','true');
+      rank.append(star,document.createTextNode(rankValue.slice(0,25)||'Учасник'));
+      sub.append(rank);
+      const num=typeof member.number==='string'||typeof member.number==='number'?String(member.number).trim().slice(0,12):'';
+      if(num){const id=document.createElement('span');id.className='kh-member-id';id.textContent='№ '+num;sub.append(id);}
+      profile.append(name,sub);
+      const crest=document.createElement('span');crest.className='kh-rank-crest';crest.textContent=rankData.symbol;crest.setAttribute('aria-hidden','true');
+      li.append(avatar,profile,crest);return li;
+    }
+    function render(){
+      const q=search.value.trim().toLocaleLowerCase('uk-UA');
+      const pool=[founderMember,...(demo?demoMembers:actualMembers)];
+      const filtered=pool.filter(m=>[m.nickname,m.rank||'',String(m.number||'')].join(' ').toLocaleLowerCase('uk-UA').includes(q));
+      list.replaceChildren(...filtered.map(buildMember));
+      count.textContent=demo?`${filtered.length} картки · демонстрація`:`${filtered.length} профілів`;
+      empty.hidden=filtered.length>0;
+      empty.querySelector('p').textContent=q?'За вашим пошуком нічого не знайдено.':
+        'Публічних профілів поки немає. Перші з’являться після підтвердження учасників і їхньої згоди.';
+      demoNotice.hidden=!demo;
+      demoButton.textContent=demo?'Повернутися до реєстру ↩':'Переглянути приклад оформлення ↗';
+    }
+    function close(focus=false){panel.hidden=true;toggle.setAttribute('aria-expanded','false');if(focus)toggle.focus();}
+    toggle.addEventListener('click',()=>{
+      if(!panel.hidden){close();return;}
+      panel.hidden=false;toggle.setAttribute('aria-expanded','true');render();search.focus({preventScroll:true});
+    });
+    closeButton.addEventListener('click',()=>close(true));
+    search.addEventListener('input',render);
+    demoButton.addEventListener('click',()=>{demo=!demo;search.value='';render();});
+    document.addEventListener('pointerdown',event=>{
+      if(!panel.hidden&&!panel.contains(event.target)&&!toggle.contains(event.target))close();
+    });
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden && document.getElementById('khFounderModal').hidden)close(true);});
+    render();
+  })();
   const NETWORKS = {USDT:"TRC20 (Tron)",BTC:"Bitcoin",ETH:"Ethereum Mainnet"};
   const tabs = [...document.querySelectorAll(".wallet-tab")];
   const addressNode = document.getElementById("walletAddress"), qrBox = document.getElementById("qrBox"), copyButton = document.getElementById("copyWallet"), walletStatus = document.getElementById("walletStatus"), walletTitle = document.getElementById("walletTitle");
@@ -109,6 +613,61 @@
   document.getElementById("year").textContent=new Date().getFullYear();
   const topButton=document.getElementById("toTop");window.addEventListener("scroll",()=>topButton.classList.toggle("visible",window.scrollY>550),{passive:true});
   if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){const io=new IntersectionObserver((entries,observer)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");observer.unobserve(e.target);}});},{threshold:.08});document.querySelectorAll(".reveal").forEach(e=>io.observe(e));}else{document.querySelectorAll(".reveal").forEach(e=>e.classList.add("visible"));}
+
+  /* Статистика відвідуваності. Працює лише після додавання Supabase URL,
+     publishable key та запуску stats_setup.sql. Не підставляємо випадкові числа. */
+  (function initCommunityStats(){
+    const onNode=document.getElementById('khOnline');
+    const memberNode=document.getElementById('khMembers');
+    const viewNode=document.getElementById('khViews');
+    const note=document.getElementById('khStatsNote');
+    const backend=(CONFIG.statsBackend||{});
+    const root=(backend.supabaseUrl||'').trim().replace(/\/$/,'');
+    const key=(backend.publishableKey||'').trim();
+    if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(root) || !/^sb_publishable_[\w-]+$/.test(key)){
+      note.textContent='Статистика ще не підключена. Після налаштування з’являться фактичні показники.';
+      return;
+    }
+    if(!window.crypto || !crypto.randomUUID){
+      note.textContent='Цей браузер не підтримує безпечний сеанс для лічильників.';return;
+    }
+    const number=new Intl.NumberFormat('uk-UA');
+    let sessionId;
+    try{
+      sessionId=sessionStorage.getItem('kh_visit_session');
+      if(!sessionId || !/^[0-9a-f-]{36}$/i.test(sessionId)){
+        sessionId=crypto.randomUUID();sessionStorage.setItem('kh_visit_session',sessionId);
+      }
+    }catch(err){sessionId=crypto.randomUUID();}
+    let isFirst=true, busy=false;
+    async function refresh(){
+      if(busy || document.visibilityState==='hidden')return;
+      busy=true;
+      try{
+        const response=await fetch(root+'/rest/v1/rpc/kh_pulse',{
+          method:'POST',
+          headers:{'apikey':key,'Content-Type':'application/json','Accept':'application/json'},
+          body:JSON.stringify({p_session:sessionId,p_count_view:isFirst}),
+          cache:'no-store'
+        });
+        if(!response.ok) throw new Error('HTTP '+response.status);
+        const payload=await response.json();
+        const data=Array.isArray(payload)?payload[0]:payload;
+        if(!data || !Number.isFinite(Number(data.online)) || !Number.isFinite(Number(data.joined)) || !Number.isFinite(Number(data.views))) throw new Error('unexpected response');
+        onNode.textContent=number.format(data.online);
+        memberNode.textContent=number.format(data.joined);
+        viewNode.textContent=number.format(data.views);
+        document.getElementById('community-stats').dataset.loaded='true';
+        note.textContent='Онлайн — активні сеанси за останні 2 хв · перегляди — від моменту підключення · учасники підтверджені адміністратором.';
+        isFirst=false;
+      }catch(err){
+        note.textContent='Не вдалося оновити показники. Перевір налаштування статистики.';
+      }finally{busy=false;}
+    }
+    refresh();
+    window.setInterval(refresh,45000);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh();});
+  })();
   </script>
 </body>
 </html>
