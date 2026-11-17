@@ -783,7 +783,7 @@ body.kh-founder-lock{overflow:hidden}
   async function showPublicMembers(){
     if(!client)return;
     try{
-      const {data,error}=await client.from('kh_profiles')
+      const {data,error}=await client.from('khar_profiles')
         .select('member_no,callsign,display_as,rank,role')
         .eq('listed',true).order('member_no',{ascending:true}).limit(250);
       if(error)throw error;
@@ -819,7 +819,7 @@ body.kh-founder-lock{overflow:hidden}
       choose(MEMBERSHIP_CONFIG.registrationOpen?'register':'login');
       return;
     }
-    const {data:profile,error:profileErr}=await client.from('kh_profiles')
+    const {data:profile,error:profileErr}=await client.from('khar_profiles')
       .select('id,member_no,callsign,display_as,rank,role,listed')
       .eq('id',currentUser.id).maybeSingle();
     if(profileErr||!profile){
@@ -886,7 +886,7 @@ body.kh-founder-lock{overflow:hidden}
       }
       const updates={callsign, display_as:dbFromLabel($('khEditAddress').value),
         listed:$('khEditPublic').checked};
-      const {data,error}=await client.from('kh_profiles').update(updates)
+      const {data,error}=await client.from('khar_profiles').update(updates)
         .eq('id',currentUser.id)
         .select('id,member_no,callsign,display_as,rank,role,listed').single();
       if(error)throw error;
