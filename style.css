@@ -521,3 +521,19 @@ main{flex:1;min-height:62vh}
 /* Відзнака офіційної команди: компактна, під шевроном, без зайвих панелей */
 .kh-award-chip.kh-team-member{color:#f7dfaa;background:linear-gradient(120deg,rgba(166,116,35,.24),rgba(31,43,36,.5));border:1px solid rgba(245,190,85,.7);box-shadow:0 0 0 1px rgba(242,178,73,.07) inset}
 .kh-award-chip.kh-team-member .kh-award-glyph{font-size:16px}
+
+/* === Спільна навігація та кнопка відзнак · 18.11.2026 === */
+.nav-links .kh-nav-login{border:1px solid rgba(216,174,104,.34);border-radius:4px;padding:9px 11px;color:var(--gold-light)!important}
+.nav-links .kh-nav-awards{color:var(--gold-light)!important;white-space:nowrap}
+.kh-hero-login{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:7px 14px;color:var(--gold-light);font-size:12px;font-weight:800;letter-spacing:.06em;border-bottom:1px solid rgba(216,174,104,.5)}
+.kh-hero-login:hover{color:#fff0cf}
+.kh-founder-tools{margin:17px 0 23px;padding:15px 17px;border:1px solid rgba(220,173,95,.42);border-radius:7px;background:linear-gradient(90deg,rgba(174,120,54,.16),rgba(15,18,16,.52))}
+.kh-founder-tools-link{display:flex;align-items:center;justify-content:space-between;gap:14px;color:var(--gold-light);font-weight:800;letter-spacing:.03em;text-decoration:none}
+.kh-founder-tools-link:hover{text-decoration:underline}
+.kh-founder-tools small{display:block;margin-top:5px;color:#c7b79a;font-size:11px}
+@media(min-width:801px){.nav-links{gap:clamp(7px,.88vw,16px)}.nav-links a{font-size:clamp(9px,.75vw,11px)}.identity strong{font-size:clamp(17px,1.5vw,22px)}}
+@media(max-width:800px){.nav-links .kh-nav-login{padding:12px 6px;text-align:center}.nav-links .kh-nav-awards{padding:12px 6px}.kh-hero-login{width:auto}}
+@media(max-width:560px){.kh-hero-login{min-height:42px;width:100%}}
+
+/* Не дозволяємо стилям кнопок перекривати атрибут hidden. */
+.nav-links a[hidden],.kh-hero-login[hidden],.page-action a[hidden],.kh-founder-tools[hidden],#khAwardsAdminLink[hidden]{display:none!important}

@@ -53,7 +53,7 @@
     if(/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(cfg.supabaseUrl||'')
        && /^sb_publishable_[A-Za-z0-9_-]+$/.test(cfg.publishableKey||'')
        && window.supabase?.createClient){
-      client=window.supabase.createClient(cfg.supabaseUrl,cfg.publishableKey);
+      client=window.supabase.createClient(cfg.supabaseUrl,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
     }
   }catch(e){console.warn('Supabase initialization failed',e);}
   const getUser = async () => {
@@ -69,6 +69,90 @@
     if(!data)throw new Error('Профіль не знайдено в базі. Перевір реєстрацію або SQL-налаштування.');
     return data;
   };
+  // Спільна навігація для ВСІХ сторінок: гість — «Увійти», учасник — «Кабінет».
+  // Supabase зберігає сесію між HTML-сторінками одного сайту; переходи не викликають signOut.
+  function initAccountNavigation(){
+    const join=document.querySelector('#navLinks .nav-join');
+    if(!join)return;
+    const loginLink=document.createElement('a');
+    loginLink.href=link('login.html');
+    loginLink.className='kh-nav-login';
+    loginLink.textContent='Увійти';
+    const awardsLink=document.createElement('a');
+    awardsLink.href=link('awards.html');
+    awardsLink.className='kh-nav-awards';
+    awardsLink.textContent='✦ Керування відзнаками';
+    awardsLink.hidden=true;
+    join.before(awardsLink,loginLink);
+
+    // На головній поруч із «Приєднатися» — компактний доступ до входу.
+    const heroActions=page==='index'?document.querySelector('.landscape-actions'):null;
+    const heroJoin=heroActions?.querySelector('a[href="register.html"]');
+    let heroLogin=null;
+    if(heroJoin){
+      heroLogin=document.createElement('a');
+      heroLogin.href=link('login.html');
+      heroLogin.className='kh-hero-login';
+      heroLogin.textContent='Увійти →';
+      heroJoin.after(heroLogin);
+    }
+    const bottomJoin=page==='index'?document.querySelector('.page-action a[href="register.html"]'):null;
+    const bottomLogin=page==='index'?document.querySelector('.page-action a[href="login.html"]'):null;
+    let renderId=0;
+    async function render(){
+      const token=++renderId;
+      let user=null;
+      if(client){
+        try{
+          const {data,error}=await client.auth.getSession();
+          if(error)throw error;
+          user=data?.session?.user||null;
+        }catch(e){console.warn('Не вдалося прочитати сесію',e);}
+      }
+      if(token!==renderId)return;
+      const signedIn=Boolean(user);
+      join.href=link(signedIn?'profile.html':'register.html');
+      join.textContent=signedIn?'Кабінет':'Приєднатися';
+      join.setAttribute('aria-label',signedIn?'Відкрити особистий кабінет':'Приєднатися до братства');
+      if(signedIn)join.setAttribute('aria-current',page==='profile'?'page':'false');
+      else join.removeAttribute('aria-current');
+      loginLink.hidden=signedIn;
+      awardsLink.hidden=true;
+      if(heroJoin){
+        heroJoin.href=link(signedIn?'profile.html':'register.html');
+        // Не перезаписуємо вміст через innerHTML: залишаємо лише безпечний текст.
+        heroJoin.textContent=signedIn?'Мій кабінет ↗':'Приєднатися до братства ↗';
+        heroLogin.hidden=signedIn;
+      }
+      if(bottomJoin){
+        bottomJoin.href=link(signedIn?'profile.html':'register.html');
+        bottomJoin.textContent=signedIn?'Перейти до кабінету ↗':'Приєднатися до братства ↗';
+      }
+      if(bottomLogin)bottomLogin.hidden=signedIn;
+      if(!signedIn)return;
+      try{
+        const p=await getMyProfile(user);
+        if(token!==renderId)return;
+        const founder= p.role==='founder' && Number(p.member_no)===1;
+        awardsLink.hidden=!founder;
+        const profileAwards=$('khFounderTools');
+        if(profileAwards)profileAwards.hidden=!founder;
+        // Посилання в публічній картці засновника працює незалежно від обговорень.
+        const founderLink=$('khAwardsAdminLink');
+        if(founderLink)founderLink.hidden=!founder;
+      }catch(e){
+        // Навіть якщо БД тимчасово недоступна, кнопка «Кабінет» залишається.
+        console.warn('Не вдалося перевірити роль для навігації',e);
+      }
+    }
+    render().catch(e=>console.warn('Помилка навігації',e));
+    if(client){
+      // Не виконуємо асинхронні виклики Supabase всередині callback зміни auth.
+      client.auth.onAuthStateChange(()=>setTimeout(()=>render().catch(e=>console.warn(e)),0));
+    }
+  }
+  initAccountNavigation();
+
   async function publicProfiles(){
     if(!client)throw new Error('Не вдалося підключитися до списку учасників.');
     const {data,error}=await client.from('khar_profiles')
@@ -187,6 +271,7 @@
       $('khAccountTitle').textContent=p.callsign || 'Обери позивний';
       $('khAccountNumber').textContent='№'+formatNo(p.member_no);
       $('khAccountRank').textContent=(p.role==='founder'?'Засновник':'Ранг: '+p.rank)+' · '+addressLabel(p.display_as);
+      if($('khFounderTools'))$('khFounderTools').hidden=!(p.role==='founder' && Number(p.member_no)===1);
       $('khEditCallsign').value=p.callsign || '';
       $('khEditAddress').value=addressLabel(p.display_as);
       $('khEditBio').value=p.bio || '';
