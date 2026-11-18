@@ -444,3 +444,51 @@ main{flex:1;min-height:62vh}
 .kh-reply-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(218,176,105,.3);background:#222016;border-radius:8px;padding:10px 12px;font-size:12px;color:#e7c68d}.kh-reply-banner button{border:0;background:transparent;color:#e7c68d;cursor:pointer}
 .kh-comment-login{font-size:13px;line-height:1.6;color:#bdb5a3;margin:18px 0}.kh-comment-login a{color:#e6b765;text-decoration:underline}
 @media(max-width:750px){.kh-discussion-section{margin:30px 14px 52px;padding:25px 17px}.kh-discussion-header{flex-direction:column;align-items:stretch}.kh-support-card{min-width:0;flex-direction:row;justify-content:space-between;padding:15px}.kh-comment-item.is-reply{margin-left:14px}.kh-comment-tools{align-items:stretch;flex-direction:column}.kh-comment-tools .btn{width:100%}}
+
+
+/* ХАРАКТЕРНИК • Компактна підтримка безпосередньо під шевроном (18.11.2026) */
+/* Розташування підтримки змінено тільки на публічних картках — логіка Supabase незмінна. */
+.founder-page{padding-bottom:24px}
+.kh-chevron-profile-page{padding-bottom:24px}
+.founder-panel,.kh-profile-panel{align-items:start}
+.founder-panel .kh-chevron-stage,.kh-profile-panel .kh-chevron-stage{width:100%}
+.kh-support-card.kh-support-inline{
+  display:flex;flex-direction:row;align-items:center;justify-content:center;
+  gap:12px;max-width:390px;width:100%;min-width:0;margin:13px auto 8px;
+  padding:10px 12px;border:1px solid rgba(217,174,105,.20);
+  border-radius:11px;background:rgba(216,166,77,.035);box-shadow:none;
+}
+.kh-support-inline .kh-support-btn{
+  min-height:38px;padding:8px 12px;white-space:nowrap;
+  border-radius:7px;background:rgba(215,174,105,.08);
+  color:#eac88f;border:1px solid rgba(219,183,121,.42);
+  font:700 12px Manrope,Arial,sans-serif;
+}
+.kh-support-inline .kh-support-btn:hover:not(:disabled){background:rgba(215,174,105,.17)}
+.kh-support-inline .kh-support-btn.is-active{background:rgba(215,174,105,.20);color:#f5d9a6;border-color:#e4b977}
+.kh-support-inline .kh-support-btn:focus-visible{outline:2px solid #e5bb76;outline-offset:3px}
+.kh-support-inline .kh-support-total{
+  display:flex;flex-direction:row;align-items:center;gap:5px;
+  font-size:11px;white-space:nowrap;color:#b9aa91;
+}
+.kh-support-inline .kh-support-total strong{font-size:17px;margin:0;color:#eac88f}
+.kh-discussion-section{
+  max-width:1020px;margin:24px auto 66px;padding:24px 29px;
+  border-radius:13px;border-color:rgba(217,174,105,.18);
+  box-shadow:none;background:linear-gradient(140deg,#111716,#0b1111);
+}
+.kh-discussion-header{gap:12px;padding-bottom:15px}
+.kh-discussion-header h2{font-size:clamp(31px,3vw,42px);margin:7px 0 8px}
+.kh-discussion-header p{max-width:780px;font-size:13px;line-height:1.55}
+.kh-discussion-feed{padding-top:17px}
+.kh-discussion-feed-title h3{font-size:clamp(23px,2.6vw,30px)}
+@media(max-width:760px){
+  .founder-page,.kh-chevron-profile-page{padding-bottom:12px}
+  .kh-discussion-section{margin:18px 14px 45px;padding:21px 18px}
+  .kh-support-card.kh-support-inline{width:min(100%,390px);flex-direction:row;justify-content:center;padding:10px}
+}
+@media(max-width:380px){
+  .kh-support-card.kh-support-inline{gap:8px;padding:8px 7px}
+  .kh-support-inline .kh-support-btn{font-size:11px;padding:7px 9px}
+  .kh-support-inline .kh-support-total{font-size:10px}
+}
