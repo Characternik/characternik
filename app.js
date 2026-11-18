@@ -63,7 +63,7 @@
   };
   const getMyProfile=async user => {
     const {data,error}=await client.from('khar_profiles')
-      .select('id,member_no,callsign,display_as,rank,role,listed')
+      .select('id,member_no,callsign,display_as,rank,role,listed,bio')
       .eq('id',user.id).maybeSingle();
     if(error)throw error;
     if(!data)throw new Error('Профіль не знайдено в базі. Перевір реєстрацію або SQL-налаштування.');
@@ -72,12 +72,66 @@
   async function publicProfiles(){
     if(!client)throw new Error('Не вдалося підключитися до списку учасників.');
     const {data,error}=await client.from('khar_profiles')
-      .select('member_no,callsign,display_as,rank,role')
+      .select('member_no,callsign,display_as,rank,role,bio')
       .eq('listed',true).order('member_no',{ascending:true}).limit(250);
     if(error)throw error;
     return data || [];
   }
 
+
+  // Shared insignia visual system: same backing for founder, first posestra, and all other ranks.
+  // The personal №002 insignia is honorary; database rank remains 'Шукач'.
+  const isAnastesha = p => Number(p?.member_no) === 2 && String(p?.callsign || '').trim().toLocaleLowerCase('uk-UA') === 'anastesha';
+  const rankDesign = rank => {
+    const v=String(rank||'Шукач').trim().toLocaleLowerCase('uk-UA');
+    if(v==='учень')return {key:'apprentice',name:'УЧЕНЬ',sign:'✧'};
+    if(v==='побратим')return {key:'brother',name:'ПОБРАТИМ',sign:'✦'};
+    if(v==='вартовий')return {key:'guardian',name:'ВАРТОВИЙ',sign:'✥'};
+    if(v==='характерник')return {key:'character',name:'ХАРАКТЕРНИК',sign:'⚝'};
+    return {key:'seek',name:'ШУКАЧ',sign:'◇'};
+  };
+  function chevronFor(p,container,mini=false){
+    if(!container)return;
+    const founder=p.role==='founder' && Number(p.member_no)===1;
+    const firstSister=isAnastesha(p);
+    const design=founder?'founder':firstSister?'anastesha':rankDesign(p.rank).key;
+    container.className='kh-chevron-stage'+(mini?' kh-chevron-mini':'')+(container.id==='khProfileChevron'?' kh-account-chevron':'');
+    container.dataset.design=design;
+    container.replaceChildren();
+    if(founder||firstSister){
+      const img=document.createElement('img');img.className='kh-chevron-image';
+      img.src=link(founder?'assets/gart-shield.webp':'assets/anastesha-shield.webp');
+      img.alt=founder?'Золотий шеврон ГАРТ №001':'Особистий шеврон ANASTESHA №002';
+      img.loading=mini?'lazy':'eager';container.append(img);
+    }else{
+      const item=rankDesign(p.rank),badge=document.createElement('div');badge.className='kh-chevron-fallback';
+      const symbol=document.createElement('span');symbol.className='kh-fallback-mark';symbol.textContent=item.sign;
+      const label=document.createElement('strong');label.textContent=item.name;
+      const note=document.createElement('small');note.textContent='ЗНАК РАНГУ';
+      badge.append(symbol,label,note);container.append(badge);
+    }
+    container.setAttribute('role','img');
+    container.setAttribute('aria-label',founder?'Шеврон засновника ГАРТ №001':firstSister?'Шеврон першої посестри ANASTESHA №002':'Знак рангу '+(p.rank||'Шукач'));
+  }
+  const chevronCaption=p=>Number(p.member_no)===1&&p.role==='founder'?'Особистий шеврон засновника · №001':isAnastesha(p)?'Особистий шеврон першої посестри · №002':'Єдиний шаблон шеврона рангу «'+(p.rank||'Шукач')+'»';
+
+  const readOptional = id => ($(id)?.value||'').trim();
+  const cleanContact = (name,id,max=60) => {
+    const v=readOptional(id);
+    if(v.length>max)throw new Error(name+': надто довге значення.');
+    return v || null;
+  };
+  const birthYear = id => {
+    const raw=readOptional(id);if(!raw)return null;
+    const yr=Number(raw),latest=new Date().getFullYear();
+    if(!Number.isInteger(yr)||yr<1900||yr>latest)throw new Error('Перевір рік народження.');
+    return yr;
+  };
+  const contactPhone = id => {
+    const value=readOptional(id);if(!value)return null;
+    if(!/^\+?[0-9() .-]{7,22}$/.test(value))throw new Error('Перевір номер телефону: використай цифри, за потреби знак +.');
+    return value;
+  };
   if(page==='register'){
     const form=$('khRegisterForm');
     form?.addEventListener('submit',event=>{
@@ -89,7 +143,11 @@
         const chosen=addressDb(selected?.value || 'Учасник');
         const {data,error}=await client.auth.signUp({
           email:$('khRegEmail').value.trim(), password:$('khRegPassword').value,
-          options:{emailRedirectTo:link('login.html'), data:{callsign, display_as:chosen}}
+          options:{emailRedirectTo:link('login.html'), data:{callsign, display_as:chosen,
+            khar_given_name:cleanContact('Ім’я','khRegFirstName'),
+            khar_family_name:cleanContact('Прізвище','khRegLastName'),
+            khar_birth_year:birthYear('khRegBirthYear'),
+            khar_phone:contactPhone('khRegPhone')}}
         });
         if(error)throw error;
         // No fake success if Supabase did not provide a user.
@@ -121,11 +179,17 @@
     let currentUser=null,currentProfile=null;
     const present=p=>{
       currentProfile=p;
+      chevronFor(p,$('khProfileChevron'));
+      $('khProfileChevronCaption').textContent=chevronCaption(p);
+      if($('khRegSideNum'))$('khRegSideNum').textContent='№'+formatNo(p.member_no);
+      const myCard=$('khMyPublicCard'),myLink=$('khMyPublicCardLink');
+      if(myCard&&myLink){myCard.hidden=!p.listed||!p.callsign;myLink.href=(p.role==='founder'&&Number(p.member_no)===1)?link('founder.html'):link('member.html?no='+encodeURIComponent(p.member_no));}
       $('khAccountTitle').textContent=p.callsign || 'Обери позивний';
       $('khAccountNumber').textContent='№'+formatNo(p.member_no);
       $('khAccountRank').textContent=(p.role==='founder'?'Засновник':'Ранг: '+p.rank)+' · '+addressLabel(p.display_as);
       $('khEditCallsign').value=p.callsign || '';
       $('khEditAddress').value=addressLabel(p.display_as);
+      $('khEditBio').value=p.bio || '';
       $('khEditPublic').checked=Boolean(p.listed);
       $('khEditCallsign').readOnly=p.role==='founder';
       $('khEditCallsign').title=p.role==='founder'?'Позивний ГАРТ закріплений за засновником.':'';
@@ -136,6 +200,20 @@
         currentUser=await getUser();
         if(!currentUser){location.replace(link('login.html'));return;}
         present(await getMyProfile(currentUser));
+        try{
+          const {data:details,error:privateErr}=await client.from('khar_member_private')
+            .select('first_name,last_name,birth_year,phone').eq('id',currentUser.id).maybeSingle();
+          if(privateErr)throw privateErr;
+          $('khPrivateFirstName').value=details?.first_name||'';
+          $('khPrivateLastName').value=details?.last_name||'';
+          $('khPrivateBirthYear').value=details?.birth_year||'';
+          $('khPrivatePhone').value=details?.phone||'';
+          $('khPrivateStatus').textContent='Ці відомості доступні тільки тобі.';
+        }catch(e){
+          $('khPrivateStatus').textContent='Приватні дані не завантажено: запусти SQL-файл оновлення у Supabase.';
+          $('khPrivateForm').querySelector('button[type="submit"]').disabled=true;
+          notify('Приватні дані не підключено',sanitizeError(e),true);
+        }
       }catch(err){loading.hidden=true;displayError(err,'Не вдалося відкрити кабінет');}
     })();
     form?.addEventListener('submit',event=>{
@@ -144,15 +222,48 @@
       withButton(form,async()=>{
         const callsign=currentProfile.role==='founder'?'ГАРТ':$('khEditCallsign').value.trim();
         if(callsign.toLocaleLowerCase('uk-UA')==='гарт' && currentProfile.role!=='founder')throw new Error('Позивний ГАРТ зарезервовано за засновником.');
-        const updates={callsign,display_as:addressDb($('khEditAddress').value),listed:$('khEditPublic').checked};
+        const updates={callsign,display_as:addressDb($('khEditAddress').value),listed:$('khEditPublic').checked,bio:readOptional('khEditBio')||null};
+        if((updates.bio||'').length>500)throw new Error('Опис «Про себе» не може перевищувати 500 символів.');
         const {data,error}=await client.from('khar_profiles')
           .update(updates).eq('id',currentUser.id)
-          .select('id,member_no,callsign,display_as,rank,role,listed').single();
+          .select('id,member_no,callsign,display_as,rank,role,listed,bio').single();
         if(error)throw error;
-        if(!data || data.callsign!==updates.callsign || data.display_as!==updates.display_as || Boolean(data.listed)!==updates.listed)
+        if(!data || data.callsign!==updates.callsign || data.display_as!==updates.display_as || Boolean(data.listed)!==updates.listed || (data.bio||null)!==updates.bio)
           throw new Error('База не підтвердила збереження усіх змін.');
         present(data);setMessage('✓ Зміни збережено у базі даних.');
-        notify('Дані збережено!','Позивний, звертання та видимість профілю оновлено.');
+        notify('Дані збережено!','Позивний, звертання, опис та видимість профілю оновлено.');
+      });
+    });
+    $('khPrivateForm')?.addEventListener('submit',ev=>{
+      ev.preventDefault();const f=ev.currentTarget;
+      if(!currentUser)return notify('Увійди в акаунт','Спочатку увійди до свого профілю.',true);
+      withButton(f,async()=>{
+        const values={id:currentUser.id,first_name:cleanContact('Ім’я','khPrivateFirstName'),
+          last_name:cleanContact('Прізвище','khPrivateLastName'),birth_year:birthYear('khPrivateBirthYear'),
+          phone:contactPhone('khPrivatePhone')};
+        const {data,error}=await client.from('khar_member_private').upsert(values,{onConflict:'id'})
+          .select('id,first_name,last_name,birth_year,phone').single();
+        if(error)throw error;
+        if(!data||data.id!==currentUser.id)throw new Error('Збереження приватних відомостей не підтверджено.');
+        $('khPrivateStatus').textContent='Приватні дані збережено.';
+        notify('Приватні дані збережено!','Відомості доступні лише у твоєму кабінеті.');
+      });
+    });
+    $('khChangePasswordForm')?.addEventListener('submit',ev=>{
+      ev.preventDefault();const f=ev.currentTarget;
+      if(!currentUser?.email)return notify('Сесія завершилася','Увійди знову.',true);
+      withButton(f,async()=>{
+        const current=$('khCurrentPassword').value;
+        const next=$('khAccountNewPassword').value;
+        const repeat=$('khAccountRepeatPassword').value;
+        if(next.length<12)throw new Error('Новий пароль має містити щонайменше 12 символів.');
+        if(next!==repeat)throw new Error('Нові паролі не збігаються.');
+        if(next===current)throw new Error('Новий пароль має відрізнятися від старого.');
+        const {error:verifyError}=await client.auth.signInWithPassword({email:currentUser.email,password:current});
+        if(verifyError)throw new Error('Поточний пароль неправильний. Якщо забув його, віднови доступ через email.');
+        const {error}=await client.auth.updateUser({password:next});
+        if(error)throw error;
+        f.reset();notify('Пароль змінено!','Новий пароль успішно збережено.');
       });
     });
     $('khLogout')?.addEventListener('click',async()=>{
@@ -166,8 +277,7 @@
     let entries=[];
     function row(p){
       const li=document.createElement('li');li.className='kh-member-row';
-      const avatar=document.createElement('div');avatar.className='kh-member-avatar';
-      avatar.textContent=p.role==='founder'?'✦':Array.from(p.callsign||'УЧ').slice(0,2).join('').toUpperCase();
+      const avatar=document.createElement('div');chevronFor(p,avatar,true);
       const details=document.createElement('div');details.className='kh-member-profile';
       const name=document.createElement('strong');name.className='kh-member-name';name.textContent=p.callsign||'Без позивного';
       const sub=document.createElement('div');sub.className='kh-member-sub';
@@ -177,10 +287,9 @@
       badge.textContent=(p.display_as==='posestra'?'✿ ':p.display_as==='pobratym'?'✦ ':'◇ ')+addressLabel(p.display_as);
       sub.append(no,rank,badge);details.append(name,sub);
       li.append(avatar,details);
-      if(p.role==='founder'){
-        li.classList.add('kh-founder-row');
-        const go=document.createElement('a');go.href='founder.html';go.className='kh-founder-link';go.textContent='Особиста картка ↗';go.style.marginLeft='auto';li.append(go);
-      }
+      if(p.role==='founder')li.classList.add('kh-founder-row');
+      const go=document.createElement('a');go.href=(p.role==='founder'&&Number(p.member_no)===1)?link('founder.html'):link('member.html?no='+encodeURIComponent(p.member_no));
+      go.className='kh-directory-profile-link';go.textContent='Картка ↗';go.setAttribute('aria-label','Відкрити картку '+(p.callsign||'учасника'));li.append(go);
       return li;
     }
     function render(){
@@ -192,6 +301,48 @@
     search?.addEventListener('input',render);
     (async()=>{try{entries=(await publicProfiles()).filter(p=>p.callsign);render();}
       catch(e){counter.textContent='Недоступно';notify('Не вдалося завантажити учасників',sanitizeError(e),true);}})();
+  }
+
+  if(page==='member'){
+    const loading=$('khMemberDetailLoading'),panel=$('khMemberDetail');
+    (async()=>{
+      try{
+        if(!client)throw new Error('Сервіс публічних профілів наразі недоступний.');
+        const n=Number(new URLSearchParams(location.search).get('no'));
+        if(!Number.isSafeInteger(n)||n<1||n>999999999)throw new Error('Невірний номер учасника.');
+        if(n===1){location.replace(link('founder.html'));return;}
+        const {data,error}=await client.from('khar_profiles')
+          .select('member_no,callsign,display_as,rank,role,bio')
+          .eq('listed',true).eq('member_no',n).maybeSingle();
+        if(error)throw error;
+        if(!data||!data.callsign)throw new Error('Картка прихована або не існує. Учасник міг змінити налаштування приватності.');
+        chevronFor(data,$('khMemberDetailChevron'));
+        $('khMemberDetailCaption').textContent=chevronCaption(data);
+        $('khMemberDetailName').textContent=data.callsign;
+        $('khMemberDetailNo').textContent='№'+formatNo(data.member_no);
+        $('khMemberDetailAddress').textContent=addressLabel(data.display_as);
+        $('khMemberDetailRank').textContent='Ранг: '+(data.rank||'Шукач');
+        $('khMemberDetailBadge').textContent=isAnastesha(data)?'✿ ПЕРША ПОСЕСТРА · ОСОБИСТИЙ ШЕВРОН':'✦ УЧАСНИК БРАТСТВА';
+        const about=$('khMemberDetailAbout');
+        if(about){about.hidden=!data.bio; $('khMemberDetailBio').textContent=data.bio||'';}
+        $('khMemberDetailInfo').textContent=isAnastesha(data)
+          ?'ANASTESHA — перша посестра спільноти «Характерник». Особистий шеврон №002 — пам’ятна відзнака, а офіційний ранг зараз «'+(data.rank||'Шукач')+'».'
+          :'Кожен учасник має власний шлях. Відзнака відображає його поточний ранг у братстві.';
+        panel.hidden=false;loading.hidden=true;
+      }catch(err){loading.textContent=sanitizeError(err);notify('Не вдалося відкрити картку',sanitizeError(err),true);}
+    })();
+  }
+
+  if(page==='founder'){
+    (async()=>{
+      if(!client)return;
+      try{
+        const {data,error}=await client.from('khar_profiles').select('bio')
+          .eq('member_no',1).eq('role','founder').eq('listed',true).maybeSingle();
+        if(error)throw error;
+        if(data?.bio){$('khFounderBio').textContent=data.bio;$('khFounderAbout').hidden=false;}
+      }catch(e){console.warn('Founder biography unavailable');}
+    })();
   }
   if(page==='index'){
     (async()=>{

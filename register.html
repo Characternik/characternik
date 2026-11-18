@@ -8,8 +8,17 @@
 </div>
 <small>Це твій власний вибір, не перевірка статі. Позначку можна змінити.</small>
 </fieldset>
+
+<fieldset class="kh-personal-optional"><legend>Додаткові відомості <span class="kh-optional-tag">необов’язково</span></legend>
+<p class="kh-field-note">Можеш вказати справжні дані для свого закритого профілю. Вони не показуються іншим учасникам. Не заповнюй, якщо не хочеш.</p>
+<div class="kh-two-fields"><label>Ім’я <input id="khRegFirstName" type="text" maxlength="60" autocomplete="given-name" placeholder="Необов’язково"></label>
+<label>Прізвище <input id="khRegLastName" type="text" maxlength="60" autocomplete="family-name" placeholder="Необов’язково"></label></div>
+<div class="kh-two-fields"><label>Рік народження <input id="khRegBirthYear" type="number" min="1900" max="2100" inputmode="numeric" placeholder="Наприклад, 1995"></label>
+<label>Телефон для зв'язку <input id="khRegPhone" type="tel" autocomplete="tel" maxlength="22" placeholder="+380…"></label></div>
+<p class="kh-field-note">Для відновлення доступу використовується підтверджена електронна пошта, а не ці дані. Телефон не підтверджується SMS і не є способом входу.</p>
+</fieldset>
 <label>Електронна пошта <input autocomplete="email" id="khRegEmail" placeholder="you@example.com" required="" type="email"/></label>
-<label>Пароль <input autocomplete="new-password" id="khRegPassword" minlength="8" placeholder="Не менше 8 символів" required="" type="password"/></label>
+<label>Пароль <input autocomplete="new-password" id="khRegPassword" minlength="12" placeholder="Не менше 12 символів" required="" type="password"/></label>
 <button class="kh-reg-submit" id="khRegisterSubmit" type="submit">Створити профіль <span aria-hidden="true">↗</span></button>
-<small>Підтверди пошту після реєстрації. Твій email не публікується.</small>
+<small>Підтверди пошту після реєстрації. Приватні дані доступні лише тобі у кабінеті; позивний та «Про себе» видно іншим лише за твоєю згодою.</small>
 </form><div class="auth-side-links">Вже є профіль? <a href="login.html">Увійти ↗</a></div><p class="kh-auth-message" id="khAuthMessage" role="status" aria-live="polite">Заповни дані та підтверди email, щоб приєднатися.</p></div><aside class="kh-reg-side"><div class="kh-reg-kicker">СИМВОЛИ БРАТСТВА</div><div class="kh-reg-illustration"><span>✦</span><span class="kh-reg-glow">№001</span></div><h4>Один шлях — різні голоси</h4><p><strong>✦ Побратим</strong> і <strong>✿ Посестра</strong> — рівноправні учасники. Обирай звертання самостійно, можна залишити нейтральне.</p><p style="margin-top:19px">№001 належить засновнику ГАРТ. Нові номери видає база автоматично.</p><p class="form-note" style="margin-top:24px">Твоя пошта не публікується. Відображення позивного в Залі братства — лише за згодою.</p></aside></div></div></main><footer><div class="container foot-grid"><p>© <span id="year"></span> ХАРАКТЕРНИК · Сила в єдності</p><p>Кожна дія має значення. <a href="index.html">На головну ↑</a></p></div></footer><div class="toast-stack" id="khToasts" aria-live="polite" aria-atomic="false"></div><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js" defer></script></body></html>
