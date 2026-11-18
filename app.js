@@ -306,9 +306,17 @@
   }
 
   // Реакції та обговорення. Публічний перегляд, дії тільки від авторизованих власників публічних профілів.
+  function showDiscussionProblem(problem){
+    const section=$('khDiscussion');if(!section)return;
+    section.hidden=false;
+    const message=$('khDiscussionStatus');if(message)message.textContent=problem;
+    const button=$('khSupportButton');if(button)button.disabled=true;
+    const form=$('khCommentForm');if(form)form.hidden=true;
+  }
   async function initDiscussion(target){
     const section=$('khDiscussion');
-    if(!section || !target?.id || !client)return;
+    if(!section)return;
+    if(!target?.id || !client){showDiscussionProblem('Обговорення тимчасово недоступне: не вдалося отримати публічний профіль або підключитися до Supabase.');return;}
     const countNode=$('khSupportCount'),supportButton=$('khSupportButton'),commentsNode=$('khComments'),
       message=$('khDiscussionStatus'),form=$('khCommentForm'),login=$('khCommentLogin'),
       privateNote=$('khCommentPublic'),commentCount=$('khCommentCount'),editor=$('khCommentBody');
@@ -464,21 +472,22 @@
           ?'ANASTESHA — перша посестра спільноти «Характерник». Особистий шеврон №002 — пам’ятна відзнака, а офіційний ранг зараз «'+(data.rank||'Шукач')+'».'
           :'Кожен учасник має власний шлях. Відзнака відображає його поточний ранг у братстві.';
         panel.hidden=false;loading.hidden=true;
-        initDiscussion(data).catch(e=>console.warn('Discussion init failed',e));
+        initDiscussion(data).catch(e=>{console.warn('Discussion init failed',e);showDiscussionProblem('Не вдалося відкрити обговорення: '+sanitizeError(e));});
       }catch(err){loading.textContent=sanitizeError(err);notify('Не вдалося відкрити картку',sanitizeError(err),true);}
     })();
   }
 
   if(page==='founder'){
     (async()=>{
-      if(!client)return;
+      if(!client){showDiscussionProblem('Обговорення недоступне: не вдалося підключити Supabase. Перевір config.js.');return;}
       try{
         const {data,error}=await client.from('khar_profiles').select('id,member_no,callsign,bio')
           .eq('member_no',1).eq('role','founder').eq('listed',true).maybeSingle();
         if(error)throw error;
-        if(data?.bio){$('khFounderBio').textContent=data.bio;$('khFounderAbout').hidden=false;}
-        if(data) initDiscussion(data).catch(e=>console.warn('Discussion init failed',e));
-      }catch(e){console.warn('Founder biography unavailable');}
+        if(!data){showDiscussionProblem('Обговорення недоступне: публічний профіль ГАРТ №001 не знайдено.');return;}
+        if(data.bio){$('khFounderBio').textContent=data.bio;$('khFounderAbout').hidden=false;}
+        await initDiscussion(data);
+      }catch(e){console.warn('Founder discussion unavailable',e);showDiscussionProblem('Не вдалося завантажити обговорення: '+sanitizeError(e));}
     })();
   }
   if(page==='index'){
