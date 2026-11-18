@@ -3,8 +3,8 @@
 <label>Звертання
             <select id="khEditAddress"><option value="Побратим">✦ Побратим</option><option value="Посестра">✿ Посестра</option><option value="Учасник">◇ Без позначки</option></select>
 </label>
-<label>Про себе <span class="kh-optional-tag">за бажанням, публічно</span>
-<textarea id="khEditBio" maxlength="500" rows="5" placeholder="Що тебе надихає, чим цікавишся, що хочеш зробити для братства…"></textarea></label>
+<label>Про себе <span class="kh-optional-tag">за бажанням, публічно · до 1000 символів</span>
+<textarea id="khEditBio" maxlength="1000" rows="5" placeholder="Що тебе надихає, чим цікавишся, що хочеш зробити для братства…"></textarea><small class="kh-field-note" id="khBioRemaining" aria-live="polite">0 / 1000 символів</small></label>
 <small class="kh-field-note">Цей опис бачать інші лише тоді, коли ти дозволяєш показувати профіль у Залі братства. Не пиши тут адресу, номер телефону чи інші приватні дані.</small>
 <label class="kh-profile-public"><input id="khEditPublic" type="checkbox"/><span>Показувати мій позивний, номер і звертання у «Залі братства»</span></label>
 <button class="kh-reg-submit" type="submit">Зберегти зміни <span aria-hidden="true">↗</span></button>

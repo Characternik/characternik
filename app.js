@@ -190,6 +190,7 @@
       $('khEditCallsign').value=p.callsign || '';
       $('khEditAddress').value=addressLabel(p.display_as);
       $('khEditBio').value=p.bio || '';
+      if($('khBioRemaining'))$('khBioRemaining').textContent=String((p.bio||'').length)+' / 1000 символів';
       $('khEditPublic').checked=Boolean(p.listed);
       $('khEditCallsign').readOnly=p.role==='founder';
       $('khEditCallsign').title=p.role==='founder'?'Позивний ГАРТ закріплений за засновником.':'';
@@ -216,6 +217,7 @@
         }
       }catch(err){loading.hidden=true;displayError(err,'Не вдалося відкрити кабінет');}
     })();
+    $('khEditBio')?.addEventListener('input',()=>{if($('khBioRemaining'))$('khBioRemaining').textContent=String($('khEditBio').value.length)+' / 1000 символів';});
     form?.addEventListener('submit',event=>{
       event.preventDefault();
       if(!currentUser||!currentProfile){notify('Профіль ще завантажується','Спробуй трохи пізніше.',true);return;}
@@ -223,7 +225,7 @@
         const callsign=currentProfile.role==='founder'?'ГАРТ':$('khEditCallsign').value.trim();
         if(callsign.toLocaleLowerCase('uk-UA')==='гарт' && currentProfile.role!=='founder')throw new Error('Позивний ГАРТ зарезервовано за засновником.');
         const updates={callsign,display_as:addressDb($('khEditAddress').value),listed:$('khEditPublic').checked,bio:readOptional('khEditBio')||null};
-        if((updates.bio||'').length>500)throw new Error('Опис «Про себе» не може перевищувати 500 символів.');
+        if((updates.bio||'').length>1000)throw new Error('Опис «Про себе» не може перевищувати 1000 символів.');
         const {data,error}=await client.from('khar_profiles')
           .update(updates).eq('id',currentUser.id)
           .select('id,member_no,callsign,display_as,rank,role,listed,bio').single();
@@ -303,6 +305,139 @@
       catch(e){counter.textContent='Недоступно';notify('Не вдалося завантажити учасників',sanitizeError(e),true);}})();
   }
 
+  // Реакції та обговорення. Публічний перегляд, дії тільки від авторизованих власників публічних профілів.
+  async function initDiscussion(target){
+    const section=$('khDiscussion');
+    if(!section || !target?.id || !client)return;
+    const countNode=$('khSupportCount'),supportButton=$('khSupportButton'),commentsNode=$('khComments'),
+      message=$('khDiscussionStatus'),form=$('khCommentForm'),login=$('khCommentLogin'),
+      privateNote=$('khCommentPublic'),commentCount=$('khCommentCount'),editor=$('khCommentBody');
+    section.hidden=false;
+    let viewer=null,myProfile=null,hasSupport=false;
+    try{
+      const {data}=await client.auth.getUser();viewer=data?.user||null;
+      if(viewer){try{myProfile=await getMyProfile(viewer);}catch(e){console.warn('Discussion viewer profile unavailable');}}
+    }catch(e){/* Неавторизованому відвідувачу дозволено читати публічні обговорення. */}
+    const allowed=Boolean(viewer && myProfile?.listed && myProfile?.callsign);
+    login.hidden=Boolean(viewer);privateNote.hidden=!viewer || allowed;
+    form.hidden=!allowed;
+    if(allowed){editor.addEventListener('input',()=>{$('khCommentRemaining').textContent=editor.value.length+' / 1000';});}
+
+    async function updateSupport(){
+      const {data,error}=await client.rpc('khar_support_count',{target_profile_id:target.id});
+      if(error)throw error;
+      countNode.textContent=Number(data||0).toLocaleString('uk-UA');
+      if(allowed){
+        const {data:mine,error:mineErr}=await client.from('khar_profile_support')
+          .select('profile_id').eq('profile_id',target.id).eq('supporter_id',viewer.id).maybeSingle();
+        if(mineErr)throw mineErr;hasSupport=Boolean(mine);
+        const own=target.id===viewer.id;
+        supportButton.disabled=own;supportButton.classList.toggle('is-active',hasSupport);
+        supportButton.textContent=own?'✓ Твій профіль':hasSupport?'✓ Підтримано':'🤝 Підтримати';
+        supportButton.title=own?'Власний профіль не можна підтримати.':'';
+      }else{supportButton.textContent='🤝 Підтримати';supportButton.disabled=true;}
+    }
+    supportButton?.addEventListener('click',async()=>{
+      if(!allowed || target.id===viewer?.id)return;
+      supportButton.disabled=true;
+      try{
+        const q=hasSupport
+          ? client.from('khar_profile_support').delete().eq('profile_id',target.id).eq('supporter_id',viewer.id)
+          : client.from('khar_profile_support').insert({profile_id:target.id,supporter_id:viewer.id});
+        const {error}=await q;if(error)throw error;
+        notify(hasSupport?'Підтримку скасовано':'Дякуємо за підтримку!');
+        await updateSupport();
+      }catch(e){displayError(e,'Підтримку не оновлено');}
+      finally{if(allowed && viewer.id!==target.id)supportButton.disabled=false;}
+    });
+
+    function commentCard(comment,people,rootId,depth=0){
+      const author=people.get(comment.author_id);
+      const wrap=document.createElement('article');wrap.className='kh-comment-item'+(depth?' is-reply':'');
+      const meta=document.createElement('div');meta.className='kh-comment-meta';
+      const name=document.createElement('span');name.className='kh-comment-name';name.textContent=author?.callsign||'Учасник';
+      const number=document.createElement('span');number.className='kh-comment-number';number.textContent=author?'№'+formatNo(author.member_no):'';
+      const date=document.createElement('time');date.className='kh-comment-date';date.dateTime=comment.created_at;
+      date.textContent=new Date(comment.created_at).toLocaleString('uk-UA',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      meta.append(name,number,date);
+      const body=document.createElement('p');body.className='kh-comment-body';body.textContent=comment.body;
+      const actions=document.createElement('div');actions.className='kh-comment-actions';
+      if(allowed){
+        const reply=document.createElement('button');reply.type='button';reply.textContent='↪ Відповісти';
+        reply.addEventListener('click',()=>{
+          $('khReplyToId').value=rootId; $('khReplyText').textContent='Відповідь на обговорення від '+(author?.callsign||'учасника');
+          $('khReplyBanner').hidden=false;editor.focus();form.scrollIntoView({behavior:'smooth',block:'center'});
+        });actions.append(reply);
+        if(comment.author_id===viewer.id || myProfile?.role==='founder'){
+          const remove=document.createElement('button');remove.type='button';remove.textContent='Видалити';
+          remove.addEventListener('click',async()=>{
+            if(!confirm('Видалити коментар та відповіді до нього?'))return;
+            remove.disabled=true;
+            const {error}=await client.from('khar_profile_comments').delete().eq('id',comment.id);
+            if(error)displayError(error,'Не вдалося видалити коментар');
+            else{notify('Коментар видалено');await updateComments();}
+            remove.disabled=false;
+          });actions.append(remove);
+        }else{
+          const report=document.createElement('button');report.type='button';report.textContent='Поскаржитись';
+          report.addEventListener('click',async()=>{
+            const reason=prompt('Чому цей коментар порушує правила спільноти? (5–500 символів)');
+            if(reason===null)return;
+            if(reason.trim().length<5 || reason.trim().length>500){notify('Перевір опис скарги','Від 5 до 500 символів.',true);return;}
+            const {error}=await client.from('khar_comment_reports').insert({comment_id:comment.id,reporter_id:viewer.id,reason:reason.trim()});
+            if(error)displayError(error,'Скаргу не надіслано');else notify('Скаргу зафіксовано','Засновник зможе переглянути її під час модерації.');
+          });actions.append(report);
+        }
+      }
+      wrap.append(meta,body,actions);return wrap;
+    }
+    async function updateComments(){
+      message.textContent='Завантажуємо обговорення…';
+      try{
+        const {data:rows,error,count}=await client.from('khar_profile_comments')
+          .select('id,profile_id,author_id,parent_id,body,created_at',{count:'exact'})
+          .eq('profile_id',target.id).order('created_at',{ascending:false}).limit(80);
+        if(error)throw error;
+        const all=(rows||[]).reverse(),ids=[...new Set(all.map(x=>x.author_id))];let authors=[];
+        if(ids.length){
+          const {data,error:authorError}=await client.from('khar_profiles')
+            .select('id,callsign,member_no').in('id',ids).eq('listed',true);
+          if(authorError)throw authorError;authors=data||[];
+        }
+        const people=new Map(authors.map(a=>[a.id,a]));
+        commentsNode.replaceChildren();
+        const visibleIds=new Set(all.map(c=>c.id));
+        const roots=all.filter(c=>!c.parent_id || !visibleIds.has(c.parent_id));
+        const children=new Map();
+        for(const c of all){if(c.parent_id && visibleIds.has(c.parent_id)){if(!children.has(c.parent_id))children.set(c.parent_id,[]);children.get(c.parent_id).push(c);}}
+        const seen=new Set();
+        function show(c,root,depth){if(seen.has(c.id) || seen.size>100)return;seen.add(c.id);
+          commentsNode.append(commentCard(c,people,root,depth));
+          for(const child of children.get(c.id)||[])show(child,root,Math.min(depth+1,1));
+        }
+        for(const c of roots)show(c,c.id,0);
+        commentCount.textContent=String(count||0);
+        message.textContent=all.length?'Останні повідомлення учасників.':'Обговорення ще немає. Залиши першу думку!';
+        if((count||0)>80)message.textContent+=' Показано останні 80 повідомлень.';
+      }catch(e){message.textContent='Не вдалося завантажити обговорення: '+sanitizeError(e);}
+    }
+    $('khReplyCancel')?.addEventListener('click',()=>{$('khReplyToId').value='';$('khReplyBanner').hidden=true;});
+    $('khDiscussionRefresh')?.addEventListener('click',()=>{updateComments();updateSupport().catch(e=>notify('Не вдалося оновити підтримку',sanitizeError(e),true));});
+    form?.addEventListener('submit',ev=>{
+      ev.preventDefault();if(!allowed)return;
+      withButton(form,async()=>{
+        const body=editor.value.trim();if(!body || body.length>1000)throw new Error('Коментар має містити від 1 до 1000 символів.');
+        const parent_id=$('khReplyToId').value||null;
+        const {error}=await client.from('khar_profile_comments').insert({profile_id:target.id,author_id:viewer.id,parent_id,body});
+        if(error)throw error;
+        editor.value='';$('khCommentRemaining').textContent='0 / 1000';$('khReplyToId').value='';$('khReplyBanner').hidden=true;
+        notify('Коментар опубліковано!');await updateComments();
+      });
+    });
+    updateSupport().catch(e=>{countNode.textContent='—';supportButton.disabled=true;message.textContent='Спершу виконай SQL-оновлення 03 в Supabase.';console.warn('Support unavailable',e);});
+    await updateComments();
+  }
+
   if(page==='member'){
     const loading=$('khMemberDetailLoading'),panel=$('khMemberDetail');
     (async()=>{
@@ -312,7 +447,7 @@
         if(!Number.isSafeInteger(n)||n<1||n>999999999)throw new Error('Невірний номер учасника.');
         if(n===1){location.replace(link('founder.html'));return;}
         const {data,error}=await client.from('khar_profiles')
-          .select('member_no,callsign,display_as,rank,role,bio')
+          .select('id,member_no,callsign,display_as,rank,role,bio')
           .eq('listed',true).eq('member_no',n).maybeSingle();
         if(error)throw error;
         if(!data||!data.callsign)throw new Error('Картка прихована або не існує. Учасник міг змінити налаштування приватності.');
@@ -329,6 +464,7 @@
           ?'ANASTESHA — перша посестра спільноти «Характерник». Особистий шеврон №002 — пам’ятна відзнака, а офіційний ранг зараз «'+(data.rank||'Шукач')+'».'
           :'Кожен учасник має власний шлях. Відзнака відображає його поточний ранг у братстві.';
         panel.hidden=false;loading.hidden=true;
+        initDiscussion(data).catch(e=>console.warn('Discussion init failed',e));
       }catch(err){loading.textContent=sanitizeError(err);notify('Не вдалося відкрити картку',sanitizeError(err),true);}
     })();
   }
@@ -337,10 +473,11 @@
     (async()=>{
       if(!client)return;
       try{
-        const {data,error}=await client.from('khar_profiles').select('bio')
+        const {data,error}=await client.from('khar_profiles').select('id,member_no,callsign,bio')
           .eq('member_no',1).eq('role','founder').eq('listed',true).maybeSingle();
         if(error)throw error;
         if(data?.bio){$('khFounderBio').textContent=data.bio;$('khFounderAbout').hidden=false;}
+        if(data) initDiscussion(data).catch(e=>console.warn('Discussion init failed',e));
       }catch(e){console.warn('Founder biography unavailable');}
     })();
   }

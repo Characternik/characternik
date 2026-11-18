@@ -416,3 +416,31 @@ main{flex:1;min-height:62vh}
 .kh-member-about h3{font:600 27px 'Cormorant Garamond',serif;color:#e7c68c;margin:0 0 8px}
 .kh-member-about p{white-space:pre-wrap;overflow-wrap:anywhere;color:#d0c7b5;font-size:13px;line-height:1.8;margin:0}
 @media(max-width:560px){.kh-two-fields{grid-template-columns:1fr}.kh-personal-optional{padding:14px}.kh-private-section{margin-top:25px}}
+
+/* ХАРАКТЕРНИК: реакції та обговорення — чорне золото */
+.kh-discussion-section{max-width:1120px;margin:58px auto 96px;padding:34px 38px;border:1px solid rgba(217,174,105,.26);background:linear-gradient(140deg,#121615 0%,#0a1111 58%,#19150f 100%);border-radius:18px;color:#e9e0cb;box-shadow:0 20px 65px rgba(0,0,0,.32)}
+.kh-discussion-section[hidden],.kh-comment-form[hidden],.kh-comment-login[hidden],.kh-reply-banner[hidden]{display:none!important}
+.kh-discussion-header{display:flex;align-items:center;justify-content:space-between;gap:30px;border-bottom:1px solid rgba(217,174,105,.18);padding-bottom:25px}
+.kh-discussion-header h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(38px,4vw,53px);line-height:1.05;margin:10px 0 12px;color:#f4e4c3}
+.kh-discussion-header p{max-width:600px;color:#b6b0a2;line-height:1.7;font-size:14px}
+.kh-support-card{min-width:200px;display:flex;align-items:center;flex-direction:column;gap:12px;padding:21px;border:1px solid rgba(217,174,105,.28);background:rgba(216,166,77,.07);border-radius:13px}
+.kh-support-btn{font:700 14px Manrope,Arial,sans-serif;background:linear-gradient(145deg,#d7ae69,#bc8d49);border:1px solid #dbb779;border-radius:9px;color:#1b170f;padding:12px 20px;min-height:46px;cursor:pointer;transition:filter .2s,transform .2s}
+.kh-support-btn:hover:not(:disabled){filter:brightness(1.12);transform:translateY(-1px)}
+.kh-support-btn:disabled{cursor:not-allowed;opacity:.6}.kh-support-btn.is-active{background:#232c27;border-color:#b49a66;color:#ecd7ad}
+.kh-support-total{font-size:12px;color:#b6aa91}.kh-support-total strong{color:#ebc787;font-size:20px;margin-right:5px}
+.kh-discussion-feed{padding-top:28px}.kh-discussion-feed-title{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.kh-discussion-feed-title h3{font:600 30px 'Cormorant Garamond',Georgia,serif;margin:0;color:#f0d9aa}
+.kh-discussion-feed-title h3 small{font:600 13px Manrope,Arial,sans-serif;color:#d3ac6b;margin-left:8px}
+.kh-discussion-refresh{background:transparent;color:#c6ad7b;border:1px solid rgba(218,174,106,.28);padding:9px 14px;border-radius:8px;cursor:pointer}
+.kh-discussion-status{font-size:13px;color:#b5a994;line-height:1.7;margin:18px 0}
+.kh-comments{display:grid;gap:13px;margin:18px 0 30px}.kh-comment-item{border:1px solid rgba(219,177,112,.16);border-radius:10px;padding:16px 18px;background:rgba(0,0,0,.17)}
+.kh-comment-item.is-reply{margin-left:36px;border-left:3px solid rgba(218,176,105,.45)}
+.kh-comment-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:11px}.kh-comment-name{font-weight:750;font-size:14px;color:#efd099}.kh-comment-number{font-size:12px;color:#b5ac9c}.kh-comment-date{font-size:12px;color:#9c998d}
+.kh-comment-body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.7;color:#e6dfd1;margin:0 0 12px}.kh-comment-actions{display:flex;gap:14px;flex-wrap:wrap}
+.kh-comment-actions button{border:0;padding:4px 0;cursor:pointer;color:#cbb080;background:none;font:600 12px Manrope,Arial,sans-serif}.kh-comment-actions button:hover{text-decoration:underline;color:#f5d5a0}
+.kh-comment-form{display:grid;gap:11px;margin-top:24px;border-top:1px solid rgba(217,174,105,.18);padding-top:23px}.kh-comment-form label{font-weight:700;font-size:14px;color:#dbc393}
+.kh-comment-form textarea{width:100%;min-height:110px;padding:15px;resize:vertical;background:#091211;color:#f3eee4;border:1px solid rgba(212,175,105,.35);border-radius:8px;font:14px/1.65 Manrope,Arial,sans-serif}
+.kh-comment-form textarea:focus{outline:2px solid #bb985d;outline-offset:1px}.kh-comment-tools{display:flex;align-items:center;justify-content:space-between;gap:15px}.kh-comment-tools small{color:#a9a18f;font-size:12px}.kh-comment-tools .btn{cursor:pointer;min-width:160px}
+.kh-reply-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(218,176,105,.3);background:#222016;border-radius:8px;padding:10px 12px;font-size:12px;color:#e7c68d}.kh-reply-banner button{border:0;background:transparent;color:#e7c68d;cursor:pointer}
+.kh-comment-login{font-size:13px;line-height:1.6;color:#bdb5a3;margin:18px 0}.kh-comment-login a{color:#e6b765;text-decoration:underline}
+@media(max-width:750px){.kh-discussion-section{margin:30px 14px 52px;padding:25px 17px}.kh-discussion-header{flex-direction:column;align-items:stretch}.kh-support-card{min-width:0;flex-direction:row;justify-content:space-between;padding:15px}.kh-comment-item.is-reply{margin-left:14px}.kh-comment-tools{align-items:stretch;flex-direction:column}.kh-comment-tools .btn{width:100%}}
