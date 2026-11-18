@@ -537,3 +537,64 @@ main{flex:1;min-height:62vh}
 
 /* Не дозволяємо стилям кнопок перекривати атрибут hidden. */
 .nav-links a[hidden],.kh-hero-login[hidden],.page-action a[hidden],.kh-founder-tools[hidden],#khAwardsAdminLink[hidden]{display:none!important}
+
+/* Шлях Характерника — Шукач I–III, версія 2026-11-18 */
+.kh-path-section{padding:55px 0 100px;background:radial-gradient(ellipse at 50% 0%,rgba(150,105,56,.09),transparent 55%),#090e10}
+.kh-path-heading{max-width:830px;margin:0 auto 28px;text-align:center}
+.kh-path-heading h2{margin:10px 0 8px;font:500 clamp(34px,5vw,57px) 'Cormorant Garamond',Georgia,serif;color:#f0dfbf;line-height:1.08}
+.kh-path-heading h2 em{color:#d6ad70;font-style:italic}
+.kh-path-heading p{color:#b7ad9a;font:500 13px/1.8 Manrope,Arial,sans-serif}
+.kh-path-heading-small{margin-top:55px}
+.kh-path-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:900px;margin:24px auto}
+.kh-path-levels>div{padding:21px 14px;border:1px solid rgba(212,169,105,.23);background:linear-gradient(150deg,#151c1b,#0d1516);text-align:center;border-radius:9px;display:grid;gap:8px}
+.kh-path-levels strong{color:#f0d9ae;font:600 22px 'Cormorant Garamond',Georgia,serif}
+.kh-path-levels small{font:700 10px Manrope,Arial,sans-serif;color:#aca08d;letter-spacing:.06em}
+.kh-path-star,.kh-path-stars{color:#e1b86b;font-size:17px;letter-spacing:.09em}
+.kh-path-progress,.kh-profile-path{border:1px solid rgba(212,170,100,.31);background:linear-gradient(145deg,rgba(30,36,33,.95),rgba(11,19,19,.96));border-radius:11px;padding:21px 26px;max-width:750px;margin:27px auto;color:#dcc8a1;text-align:left}
+.kh-path-progress p,.kh-profile-path p{margin:7px 0 0;color:#aead9e;line-height:1.6;font:500 12px Manrope,Arial,sans-serif}
+.kh-path-progress a,.kh-profile-path a{display:inline-flex;margin-top:11px;color:#eac886;font:700 11px Manrope,Arial,sans-serif;text-decoration:none;letter-spacing:.03em}
+.kh-path-progress a:hover,.kh-profile-path a:hover{text-decoration:underline}
+.kh-path-progress>strong,.kh-profile-path>strong{font:700 17px Manrope,Arial,sans-serif;color:#e9c47d}
+.kh-path-progress small,.kh-profile-path small{display:block;color:#9f9687;margin-top:8px;line-height:1.65;font-size:10px}
+.kh-path-progress-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;color:#f1dab5}
+.kh-path-progress-heading strong{font:700 15px Manrope,Arial,sans-serif}
+.kh-path-track{height:10px;border-radius:20px;background:#070b0b;border:1px solid #cba46c47;overflow:hidden;margin-top:15px}
+.kh-path-track span{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#815c34,#d5ab63,#f0d38c);transition:width .25s ease}
+.kh-path-progress .kh-path-progress-numbers,.kh-profile-path .kh-path-progress-numbers{margin-top:7px;color:#d7c4a2}
+.kh-profile-path{margin:5px auto 24px;max-width:440px;padding:17px 18px}
+.kh-profile-path .kh-path-progress-heading strong{font-size:12px}
+.kh-path-missions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:1100px;margin:18px auto 0;align-items:start}
+.kh-path-mission{background:linear-gradient(145deg,#131b1b,#0b1315);border:1px solid rgba(216,171,106,.25);padding:24px;border-radius:11px;min-height:200px}
+.kh-path-mission-head{display:flex;gap:13px;align-items:flex-start}
+.kh-path-mission-index{font:600 29px 'Cormorant Garamond',Georgia,serif;color:#956e40;line-height:1}
+.kh-path-mission-head>div{flex:1;min-width:0}
+.kh-path-mission h3{font:600 29px 'Cormorant Garamond',Georgia,serif;margin:-5px 0 6px;color:#f2d9a9}
+.kh-path-mission-head p{color:#b0aaa0;font:500 12px/1.8 Manrope,Arial,sans-serif;margin:0}
+.kh-path-mission-xp{white-space:nowrap;border:1px solid #c39a5c66;color:#e6bf7e;font:700 11px Manrope,Arial,sans-serif;border-radius:20px;padding:7px 10px}
+.kh-path-status,.kh-path-explain{font:500 12px/1.8 Manrope,Arial,sans-serif;color:#aaa08e;text-align:center;margin:15px auto;max-width:900px}
+.kh-path-explain{padding:17px 20px;border-top:1px solid rgba(203,153,88,.22);max-width:1080px;margin-top:32px}
+.kh-path-mission-state{font:700 11px Manrope,Arial,sans-serif;margin-top:17px;color:#d4be8f}
+.kh-path-mission-approved{color:#99c9a0}.kh-path-mission-rejected{color:#e8ab8f}
+.kh-path-mission-note{font:500 12px/1.6 Manrope,Arial,sans-serif;color:#dbc09d;padding:10px;border-left:2px solid #caa46b;background:#caa46b10;white-space:pre-wrap}
+.kh-path-mission-date,.kh-path-mission-hint{font:500 10px/1.6 Manrope,Arial,sans-serif;color:#a8a093;margin-top:12px}
+.kh-path-submit{display:grid;gap:10px;margin-top:21px}
+.kh-path-submit label,.kh-path-review-card label{font:700 11px Manrope,Arial,sans-serif;color:#d9bc8e;display:grid;gap:8px}
+.kh-path-submit textarea,.kh-path-review-card textarea{box-sizing:border-box;width:100%;background:#081011;border:1px solid rgba(214,169,101,.4);border-radius:7px;color:#f5e5ca;padding:13px 14px;font:500 12px/1.6 Manrope,Arial,sans-serif;resize:vertical;min-height:100px}
+.kh-path-submit textarea:focus,.kh-path-review-card textarea:focus{outline:2px solid #ad844f;outline-offset:2px}
+.kh-path-submit small{font-size:10px;color:#968d7c;line-height:1.55}
+.kh-path-submit-button,.kh-path-approve{background:linear-gradient(120deg,#e4c18a,#b28a4c);border:1px solid #e6c58b;padding:12px 16px;border-radius:6px;cursor:pointer;font:800 11px Manrope,Arial,sans-serif;color:#151411}
+.kh-path-submit-button:disabled,.kh-path-approve:disabled,.kh-path-reject:disabled{cursor:wait;opacity:.55}
+.kh-path-review{padding-top:12px;max-width:1100px;margin:40px auto 0;border-top:1px solid rgba(212,167,97,.24)}
+.kh-path-review-list{display:grid;gap:15px;margin-top:18px}
+.kh-path-review-card{border:1px solid #d6a9664f;border-radius:10px;background:#121a1a;padding:22px}
+.kh-path-review-card h3{font:500 30px 'Cormorant Garamond',Georgia,serif;margin:0 0 5px;color:#f2d8a6}
+.kh-path-review-card small{font-size:10px;color:#9e9587}
+.kh-path-review-card .kh-path-review-mission{color:#d2b482;font:700 11px Manrope,Arial,sans-serif;margin:6px 0}
+.kh-path-review-evidence{padding:15px 17px;background:#080f10;border-left:2px solid #ae8651;color:#d5cbba;white-space:pre-wrap;overflow-wrap:anywhere;font:500 12px/1.85 Manrope,Arial,sans-serif;margin:16px 0}
+.kh-path-review-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.kh-path-reject,.kh-path-refresh{cursor:pointer;border:1px solid #bd9b70;background:#1d2422;color:#eccba0;padding:12px 16px;border-radius:6px;font:700 11px Manrope,Arial,sans-serif}
+.kh-path-refresh{display:block;margin:5px auto 15px}
+#khMissionReviewStatus{text-align:center;color:#baad97;font:500 12px Manrope,Arial,sans-serif}
+.kh-path-bottom{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.kh-path-section [hidden],.kh-profile-path[hidden]{display:none!important}
+@media(max-width:750px){.kh-path-section{padding:32px 0 65px}.kh-path-missions{grid-template-columns:1fr}.kh-path-levels{gap:6px}.kh-path-levels>div{padding:17px 5px}.kh-path-levels strong{font-size:18px}.kh-path-star{font-size:13px}.kh-path-mission{padding:19px}.kh-path-mission-head{gap:7px}.kh-path-mission h3{font-size:25px}.kh-path-mission-index{font-size:24px}.kh-path-mission-xp{padding:5px 7px;font-size:10px}.kh-path-progress{padding:17px}.kh-path-progress-heading strong{font-size:12px}}

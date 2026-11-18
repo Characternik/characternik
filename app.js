@@ -286,6 +286,7 @@
         currentUser=await getUser();
         if(!currentUser){location.replace(link('login.html'));return;}
         present(await getMyProfile(currentUser));
+        loadProfilePath().catch(e=>console.warn('Path unavailable',e));
         try{
           const {data:details,error:privateErr}=await client.from('khar_member_private')
             .select('first_name,last_name,birth_year,phone').eq('id',currentUser.id).maybeSingle();
@@ -359,6 +360,163 @@
       catch(e){displayError(e,'Не вдалося вийти');}
     });
   }
+  // «Шлях Характерника» v1: рішення й XP зберігаються тільки на сервері.
+  function pathProgressCard(host,progress,compact=false){
+    if(!host||!progress)return;
+    host.replaceChildren();
+    if(progress.founder){
+      const h=document.createElement('strong');h.textContent='✦ Засновник · ГАРТ №001';
+      const p=document.createElement('p');p.textContent='Ступені учасників не змінюють статус засновника.';
+      const a=document.createElement('a');a.href=link('missions.html');a.textContent='⚔ Перевірити випробування ↗';
+      host.append(h,p,a);return;
+    }
+    const xp=Math.max(0,Number(progress.xp)||0),lv=Math.min(3,Math.max(1,Number(progress.level)||1));
+    const goal=Number(progress.next_goal)||500;
+    const heading=document.createElement('div');heading.className='kh-path-progress-heading';
+    const rank=document.createElement('strong');rank.textContent=(progress.rank||'Шукач')+' · Рівень '+['','I','II','III'][lv];
+    const stars=document.createElement('span');stars.className='kh-path-stars';stars.textContent='✦'.repeat(lv)+'·'.repeat(3-lv);
+    heading.append(rank,stars);
+    const track=document.createElement('div');track.className='kh-path-track';track.setAttribute('role','progressbar');track.setAttribute('aria-label','Досвід до наступного етапу');
+    track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax',String(goal));track.setAttribute('aria-valuenow',String(Math.min(xp,goal)));
+    const fill=document.createElement('span');fill.style.width=Math.min(100,Math.round(xp/goal*100))+'%';track.append(fill);
+    const p=document.createElement('p');p.className='kh-path-progress-numbers';p.textContent=(xp>=500?'Перший етап завершено · ': 'Досвід: ')+xp+' / '+goal+' XP';
+    const a=document.createElement('a');a.href=link('missions.html');a.textContent=compact?'Мої випробування ↗':'До випробувань ↗';
+    host.append(heading,track,p,a);
+    if(xp>=500){const note=document.createElement('small');note.textContent='Наступна ступінь «Гартівник» потребуватиме окремого випробування.';host.append(note);}
+  }
+  async function loadProfilePath(){
+    const box=$('khProfilePath');if(!box||!client)return;
+    try{const {data,error}=await client.rpc('khar_my_path_progress');if(error)throw error;pathProgressCard(box,data,true);}
+    catch(e){box.textContent='Прогрес поки недоступний: перевір встановлення SQL 06.';console.warn('Path progress:',e);}
+  }
+  if(page==='missions'){
+    const cards=$('khMissionCards'),status=$('khMissionStatus'),progressHost=$('khPathProgress');
+    const admin=$('khMissionReviewSection'),queueHost=$('khMissionReviewList'),queueStatus=$('khMissionReviewStatus');
+    let missions=[],submissions=[],viewerProfile=null;
+    const missionText=statusCode=>({pending:'⌛ На перевірці',approved:'✓ Схвалено',rejected:'↻ Повернуто на доопрацювання'})[statusCode]||'Не подано';
+    const dateFmt=value=>{try{return new Date(value).toLocaleDateString('uk-UA',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return '—';}};
+    const make=(tag,cl='',content)=>{const el=document.createElement(tag);if(cl)el.className=cl;if(content!==undefined)el.textContent=String(content);return el;};
+    async function loadSubmissions(){
+      if(!viewerProfile||viewerProfile.role==='founder'){submissions=[];return;}
+      const {data,error}=await client.rpc('khar_my_mission_submissions');if(error)throw error;
+      submissions=Array.isArray(data)?data:[];
+    }
+    function renderMissions(){
+      cards.replaceChildren();
+      if(!missions.length){status.textContent='Активних завдань наразі немає.';return;}
+      status.textContent='Обирай завдання у зручному для себе темпі. Виконання перевіряє засновник.';
+      missions.forEach((mission,i)=>{
+        const own=submissions.find(s=>s.mission_code===mission.code);
+        const card=make('article','kh-path-mission');
+        const head=make('div','kh-path-mission-head');
+        const index=make('span','kh-path-mission-index',String(i+1).padStart(2,'0'));
+        const content=make('div');const title=make('h3','',mission.title);
+        const desc=make('p','',mission.description);content.append(title,desc);
+        const reward=make('strong','kh-path-mission-xp','+'+mission.xp_reward+' XP');
+        head.append(index,content,reward);card.append(head);
+        if(own){
+          const tag=make('div','kh-path-mission-state kh-path-mission-'+own.status,missionText(own.status));
+          card.append(tag);
+          if(own.review_note){card.append(make('p','kh-path-mission-note','Коментар перевірки: '+own.review_note));}
+          if(own.submitted_at)card.append(make('small','kh-path-mission-date','Подано '+dateFmt(own.submitted_at)));
+        }
+        const allowed=viewerProfile?.role==='member' && viewerProfile?.rank==='Шукач';
+        if(allowed&&(!own||own.status==='rejected')){
+          const form=make('form','kh-path-submit');
+          const label=make('label','',own?'Онови опис виконаного завдання':'Розкажи, як виконав завдання');
+          const textarea=make('textarea');textarea.name='evidence';textarea.rows=4;textarea.minLength=30;textarea.maxLength=1200;
+          textarea.required=true;textarea.placeholder='Що зроблено, чому це було важливо, який результат… (30–1200 символів)';
+          if(own?.status==='rejected')textarea.value=own.evidence||'';
+          const note=make('small','','Не додавай чужі контакти або приватні подробиці.');
+          const send=make('button','kh-path-submit-button',own?'Повторно надіслати ↗':'Надіслати на перевірку ↗');send.type='submit';
+          label.append(textarea);form.append(label,note,send);card.append(form);
+          form.addEventListener('submit',event=>{
+            event.preventDefault();withButton(form,async()=>{
+              const evidence=textarea.value.trim();
+              if(evidence.length<30||evidence.length>1200)throw new Error('Напиши від 30 до 1200 символів.');
+              const {error}=await client.rpc('khar_submit_mission',{p_code:mission.code,p_evidence:evidence});
+              if(error)throw error;
+              notify('Завдання надіслано','Засновник перевірить опис. XP з’являться тільки після схвалення.');
+              await loadSubmissions();renderMissions();
+            });
+          });
+        }else if(!viewerProfile){card.append(make('p','kh-path-mission-hint','Увійди, щоб надсилати виконані завдання.'));}
+        else if(viewerProfile.role==='founder')card.append(make('p','kh-path-mission-hint','Засновник розглядає заявки у панелі нижче.'));
+        else if(viewerProfile.rank!=='Шукач')card.append(make('p','kh-path-mission-hint','Цей етап призначений для ступеня «Шукач».'));
+        cards.append(card);
+      });
+    }
+    async function refreshProgress(){
+      if(!viewerProfile||viewerProfile.role==='founder')return;
+      const {data,error}=await client.rpc('khar_my_path_progress');if(error)throw error;
+      pathProgressCard(progressHost,data);
+    }
+    async function refreshReviewQueue(){
+      queueStatus.textContent='Завантажуємо заявки…';queueHost.replaceChildren();
+      const {data,error}=await client.rpc('khar_mission_review_queue');if(error)throw error;
+      queueStatus.textContent=data.length?('На перевірці: '+data.length+(data.length===100?' (показано перші 100)':'')):'Наразі немає заявок на перевірку.';
+      (data||[]).forEach(item=>{
+        const card=make('article','kh-path-review-card');
+        const title=make('h3','',item.callsign+' · №'+formatNo(item.member_no));
+        const mission=make('p','kh-path-review-mission',item.mission_title+' · +'+item.xp_reward+' XP');
+        const submitted=make('small','', 'Подано: '+dateFmt(item.submitted_at));
+        const evidence=make('p','kh-path-review-evidence',item.evidence);
+        const label=make('label','','Коментар перевірки (для відмови обов’язковий)');
+        const note=make('textarea');note.maxLength=500;note.rows=2;note.placeholder='Пояснення рішення (до 500 символів)';
+        label.append(note);
+        const actions=make('div','kh-path-review-actions');
+        const approve=make('button','kh-path-approve','✓ Схвалити');approve.type='button';
+        const reject=make('button','kh-path-reject','↻ Відхилити');reject.type='button';
+        actions.append(approve,reject);card.append(title,mission,submitted,evidence,label,actions);queueHost.append(card);
+        async function decide(accept){
+          if(!accept && note.value.trim().length<5){notify('Вкажи причину відхилення','Щонайменше 5 символів.',true);note.focus();return;}
+          approve.disabled=reject.disabled=true;
+          try{
+            const {data:result,error:reviewErr}=await client.rpc('khar_review_mission',{
+              p_submission_id:item.submission_id,p_approve:accept,p_note:note.value.trim()||null
+            });
+            if(reviewErr)throw reviewErr;
+            notify(accept?'Випробування схвалено':'Повернуто на доопрацювання',
+              accept?'Учаснику зараховано +'+result.awarded_xp+' XP.':'Учасник побачить твоє пояснення.');
+            await refreshReviewQueue();
+          }catch(e){displayError(e,'Не вдалося зберегти рішення');approve.disabled=reject.disabled=false;}
+        }
+        approve.addEventListener('click',()=>decide(true));reject.addEventListener('click',()=>decide(false));
+      });
+    }
+    $('khMissionReviewReload')?.addEventListener('click',()=>refreshReviewQueue().catch(e=>{queueStatus.textContent=sanitizeError(e);notify('Не вдалося завантажити заявки',sanitizeError(e),true);}));
+    (async()=>{
+      if(!client){progressHost.textContent='Сервіс тимчасово недоступний. Перевір з’єднання з Supabase.';status.textContent='Випробування не завантажено.';return;}
+      try{
+        const {data:missionsData,error:missionsErr}=await client.from('khar_missions')
+          .select('code,title,description,xp_reward,sort_order').eq('active',true).order('sort_order');
+        if(missionsErr)throw missionsErr;
+        missions=missionsData||[];
+        const {data:sessionData,error:sessionErr}=await client.auth.getSession();
+        if(sessionErr)throw sessionErr;
+        if(sessionData?.session?.user){
+          viewerProfile=await getMyProfile(sessionData.session.user);
+          if(viewerProfile.role==='founder'){
+            pathProgressCard(progressHost,{founder:true});admin.hidden=false;
+            await refreshReviewQueue();
+          }else{
+            await Promise.all([loadSubmissions(),refreshProgress()]);
+          }
+        }else{
+          progressHost.replaceChildren();
+          progressHost.append(make('p','','Увійди до акаунта, щоб почати шлях і бачити свої XP.'));
+          const login=make('a','','Увійти ↗');login.href=link('login.html');progressHost.append(login);
+        }
+        renderMissions();
+      }catch(e){
+        const message=sanitizeError(e);
+        status.textContent='Не вдалося завантажити систему випробувань: '+message+'. Спочатку встанови SQL 06 у Supabase.';
+        progressHost.textContent='Дані прогресу недоступні.';
+        notify('Не вдалося відкрити випробування',message,true);
+      }
+    })();
+  }
+
   if(page==='members'){
     const list=$('khPublicMembersList'),search=$('khMemberSearch'),counter=$('khDirectoryCount'),empty=$('khMembersEmpty');
     let entries=[];
