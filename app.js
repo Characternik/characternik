@@ -543,7 +543,22 @@
       const item=document.createElement('span');
       item.className='kh-award-chip kh-'+(badge.kind==='community'?'community':badge.kind==='manual'?'manual':'rank')+(badge.code==='team_member'?' kh-team-member':'');
       item.setAttribute('role','listitem');item.title=badge.description||badge.title;
-      const icon=document.createElement('span');icon.className='kh-award-glyph';icon.textContent=badge.symbol||'✦';
+      const icon=document.createElement('span');icon.className='kh-award-glyph';
+      if(badge.code==='team_member'){
+        // Official Ukrainian Tryzub silhouette (public-domain Coat of Arms of Ukraine),
+        // not the Unicode trident/pitchfork emoji. Keeps the team insignia identical across devices.
+        const ns='http://www.w3.org/2000/svg';
+        const svg=document.createElementNS(ns,'svg');
+        svg.setAttribute('viewBox','80 40 500 830');
+        svg.setAttribute('width','15');svg.setAttribute('height','21');
+        svg.setAttribute('aria-hidden','true');
+        svg.setAttribute('focusable','false');
+        svg.style.display='block';
+        const tryzubShape='m329 53c-6 4-2 396 0 401 12 43 29 81 48 112-104 31-63 146-48 287 7-12 17-21 28-28 43-34 70-81 79-132h133v-580c-148 88-132 213-148 361 59-10 75 76-3 83-92-149-59-257-59-419 0-37-9-62-30-85zm200 143v297h-22c-6-23-21-41-42-51 8-85 10-189 64-246zm-22 337h22v120h-89c0-19-3-39-8-58 36-4 68-29 75-62zm-114 71c4 16 6 33 6 49h-50c1-27 19-44 44-49zm-44 89h46c-7 31-23 61-46 85z';
+        const half=document.createElementNS(ns,'path');half.setAttribute('d',tryzubShape);half.setAttribute('fill','currentColor');
+        const mirrored=half.cloneNode(true);mirrored.setAttribute('transform','translate(658 0) scale(-1 1)');
+        svg.append(half,mirrored);icon.append(svg);
+      }else icon.textContent=badge.symbol||'✦';
       const label=document.createElement('span');label.textContent=badge.title||'Відзнака';
       item.append(icon,label);host.append(item);
     }
@@ -584,7 +599,7 @@
       const eligible=profiles.filter(p=>p.role==='member'&&p.callsign);
       members.replaceChildren();codes.replaceChildren();
       for(const p of eligible){const opt=document.createElement('option');opt.value=String(p.member_no);opt.textContent='№'+formatNo(p.member_no)+' · '+p.callsign;members.append(opt);}
-      for(const b of catalog||[]){const opt=document.createElement('option');opt.value=b.code;opt.textContent=(b.symbol||'✦')+' '+b.title;opt.title=b.description;codes.append(opt);}
+      for(const b of catalog||[]){const opt=document.createElement('option');opt.value=b.code;opt.textContent=b.code==='team_member'?b.title+' · Тризуб України':(b.symbol||'✦')+' '+b.title;opt.title=b.description;codes.append(opt);}
       gate.hidden=true;dashboard.hidden=false;
       const refresh=async()=>{
         if(!members.value){current.textContent='Немає відкритих профілів для нагородження.';return;}
