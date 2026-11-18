@@ -492,3 +492,32 @@ main{flex:1;min-height:62vh}
   .kh-support-inline .kh-support-btn{font-size:11px;padding:7px 9px}
   .kh-support-inline .kh-support-total{font-size:10px}
 }
+
+
+/* ХАРАКТЕРНИК · Відзнаки: тонка лінія нагород замість громіздких карток */
+.kh-awards-mini{width:min(100%,390px);margin:13px auto 4px;padding:12px 0 4px;text-align:center;border-top:1px solid rgba(219,179,108,.17)}
+.kh-awards-kicker{font:800 9px Manrope,Arial,sans-serif;letter-spacing:.19em;color:#bca17b;margin-bottom:11px}
+.kh-awards-list{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px;min-height:20px}
+.kh-award-chip{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:5px 9px;border:1px solid rgba(200,159,94,.33);border-radius:18px;background:rgba(180,133,71,.07);font:700 10px Manrope,Arial,sans-serif;line-height:1.4;color:#e0c798}
+.kh-award-chip.kh-community{color:#f0d9a9;background:rgba(181,129,45,.17);border-color:rgba(244,195,100,.65)}
+.kh-award-chip.kh-manual{color:#e4c9d4;background:rgba(139,53,75,.13);border-color:rgba(190,109,130,.42)}
+.kh-award-chip.kh-rank{color:#c6d2c7;background:rgba(112,139,129,.12);border-color:rgba(142,159,146,.38)}
+.kh-award-chip .kh-award-glyph{font-size:14px;line-height:1}
+.kh-awards-pending,.kh-awards-next{font:500 10px Manrope,Arial,sans-serif;color:#968a79;line-height:1.6}
+.kh-awards-next{margin:9px 0 0}
+#khAwardsAdminLink[hidden]{display:none!important}
+.kh-awards-admin{max-width:1000px;margin:55px auto 85px;padding:0 20px}
+.kh-awards-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.kh-awards-admin-card{background:linear-gradient(140deg,#111817,#0d1314);border:1px solid rgba(209,169,105,.25);padding:28px;border-radius:12px}
+.kh-awards-admin-card h2{font:500 34px 'Cormorant Garamond',Georgia,serif;color:#ebd5aa;margin:0 0 10px}
+.kh-awards-admin-card p{font-size:12px;line-height:1.75;color:#aba393}
+.kh-awards-admin-card label{display:block;margin:17px 0 7px;font:700 11px Manrope,Arial,sans-serif;color:#ddc7a4}
+.kh-awards-admin-card select{width:100%;padding:12px 15px;border-radius:7px;background:#071010;border:1px solid rgba(224,177,103,.35);color:#f8e8ce;font:500 13px Manrope,Arial,sans-serif}
+.kh-awards-admin-card .btn{margin-top:14px;min-height:44px}
+.kh-awards-admin-card .kh-awards-list{justify-content:flex-start;margin-top:14px}
+.kh-awards-admin-card [hidden]{display:none!important}
+@media(max-width:760px){.kh-awards-admin-grid{grid-template-columns:1fr}.kh-awards-admin-card{padding:22px}.kh-awards-mini{width:100%}}
+
+/* Відзнака офіційної команди: компактна, під шевроном, без зайвих панелей */
+.kh-award-chip.kh-team-member{color:#f7dfaa;background:linear-gradient(120deg,rgba(166,116,35,.24),rgba(31,43,36,.5));border:1px solid rgba(245,190,85,.7);box-shadow:0 0 0 1px rgba(242,178,73,.07) inset}
+.kh-award-chip.kh-team-member .kh-award-glyph{font-size:16px}

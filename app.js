@@ -355,6 +355,8 @@
         const {error}=await q;if(error)throw error;
         notify(hasSupport?'Підтримку скасовано':'Дякуємо за підтримку!');
         await updateSupport();
+        // Нові відзнаки за поріг підтримок одразу видно після натискання.
+        await loadProfileBadges(target);
       }catch(e){displayError(e,'Підтримку не оновлено');}
       finally{if(allowed && viewer.id!==target.id)supportButton.disabled=false;}
     });
@@ -446,6 +448,81 @@
     await updateComments();
   }
 
+  // Відзнаки завжди завантажуються з БД; клієнт ніколи не надає їх напряму.
+  function renderAwardChips(badges, host){
+    if(!host)return;
+    host.replaceChildren();
+    if(!badges.length){const blank=document.createElement('span');blank.className='kh-awards-pending';
+      blank.textContent='Відзнак поки немає. Усе починається з вчинків.';host.append(blank);return;}
+    for(const badge of badges){
+      const item=document.createElement('span');
+      item.className='kh-award-chip kh-'+(badge.kind==='community'?'community':badge.kind==='manual'?'manual':'rank')+(badge.code==='team_member'?' kh-team-member':'');
+      item.setAttribute('role','listitem');item.title=badge.description||badge.title;
+      const icon=document.createElement('span');icon.className='kh-award-glyph';icon.textContent=badge.symbol||'✦';
+      const label=document.createElement('span');label.textContent=badge.title||'Відзнака';
+      item.append(icon,label);host.append(item);
+    }
+  }
+  async function loadProfileBadges(profile){
+    const host=$('khBadgesList');if(!host||!profile||!client)return;
+    try{
+      const {data,error}=await client.rpc('khar_list_badges',{target_member_no:Number(profile.member_no)});
+      if(error)throw error;
+      renderAwardChips(data||[],host);
+      if(Number(profile.member_no)===1 && profile.role==='founder'){
+        const nextNode=$('khNextBadge');
+        const {data:count,error:countError}=await client.rpc('khar_support_count',{target_profile_id:profile.id});
+        if(!countError&&nextNode){
+          const n=Number(count)||0;const next=[100,1000,5000,10000,50000,100000,250000,500000,1000000].find(x=>x>n);
+          nextNode.hidden=!next;
+          if(next)nextNode.textContent='Наступна відзнака від спільноти: '+new Intl.NumberFormat('uk-UA').format(next)+' підтримок (ще '+new Intl.NumberFormat('uk-UA').format(next-n)+').';
+        }
+      }
+    }catch(error){
+      console.warn('Awards unavailable',error);
+      host.textContent='Відзнаки ще не налаштовано. Перевір SQL 04.';
+    }
+  }
+  async function initAwardsAdmin(){
+    const gate=$('khAwardsGate'),dashboard=$('khAwardsAdmin'),members=$('khAwardsMember'),codes=$('khAwardsCode'),
+      form=$('khAwardsForm'),current=$('khAwardsCurrent');
+    if(!client){gate.textContent='Немає підключення до Supabase.';return;}
+    try{
+      const viewer=await getUser();
+      if(!viewer)throw new Error('Спочатку увійди до свого акаунта.');
+      const profile=await getMyProfile(viewer);
+      if(!(profile.role==='founder'&&Number(profile.member_no)===1))throw new Error('Керувати відзнаками може тільки ГАРТ №001.');
+      const [{data:catalog,error:catError},profiles]=await Promise.all([
+        client.rpc('khar_list_manual_badges'),publicProfiles()
+      ]);
+      if(catError)throw catError;
+      const eligible=profiles.filter(p=>p.role==='member'&&p.callsign);
+      members.replaceChildren();codes.replaceChildren();
+      for(const p of eligible){const opt=document.createElement('option');opt.value=String(p.member_no);opt.textContent='№'+formatNo(p.member_no)+' · '+p.callsign;members.append(opt);}
+      for(const b of catalog||[]){const opt=document.createElement('option');opt.value=b.code;opt.textContent=(b.symbol||'✦')+' '+b.title;opt.title=b.description;codes.append(opt);}
+      gate.hidden=true;dashboard.hidden=false;
+      const refresh=async()=>{
+        if(!members.value){current.textContent='Немає відкритих профілів для нагородження.';return;}
+        const {data,error}=await client.rpc('khar_list_badges',{target_member_no:Number(members.value)});
+        if(error)throw error;renderAwardChips(data||[],current);
+      };
+      members.addEventListener('change',()=>refresh().catch(e=>displayError(e)));
+      form.addEventListener('submit',ev=>{
+        ev.preventDefault();withButton(form,async()=>{
+          if(!members.value||!codes.value)throw new Error('Вибери учасника й відзнаку.');
+          const granted=$('khAwardsAction').value==='grant';
+          const {error}=await client.rpc('khar_set_badge',{
+            target_member_no:Number(members.value),target_badge_code:codes.value,make_active:granted
+          });if(error)throw error;
+          notify(granted?'Відзнаку вручено!':'Відзнаку відкликано.','Зміни збережено у Supabase.');
+          await refresh();
+        });
+      });
+      await refresh();
+    }catch(err){gate.textContent=sanitizeError(err);}
+  }
+  if(page==='awards')initAwardsAdmin().catch(e=>displayError(e));
+
   if(page==='member'){
     const loading=$('khMemberDetailLoading'),panel=$('khMemberDetail');
     (async()=>{
@@ -472,6 +549,7 @@
           ?'ANASTESHA — перша посестра спільноти «Характерник». Особистий шеврон №002 — пам’ятна відзнака, а офіційний ранг зараз «'+(data.rank||'Шукач')+'».'
           :'Кожен учасник має власний шлях. Відзнака відображає його поточний ранг у братстві.';
         panel.hidden=false;loading.hidden=true;
+        loadProfileBadges(data);
         initDiscussion(data).catch(e=>{console.warn('Discussion init failed',e);showDiscussionProblem('Не вдалося відкрити обговорення: '+sanitizeError(e));});
       }catch(err){loading.textContent=sanitizeError(err);notify('Не вдалося відкрити картку',sanitizeError(err),true);}
     })();
@@ -486,7 +564,11 @@
         if(error)throw error;
         if(!data){showDiscussionProblem('Обговорення недоступне: публічний профіль ГАРТ №001 не знайдено.');return;}
         if(data.bio){$('khFounderBio').textContent=data.bio;$('khFounderAbout').hidden=false;}
+        loadProfileBadges(data);
         await initDiscussion(data);
+        try{const viewer=await getUser();if(viewer){const owner=await getMyProfile(viewer);
+          if(owner.role==='founder'&&Number(owner.member_no)===1 && $('khAwardsAdminLink'))$('khAwardsAdminLink').hidden=false;
+        }}catch(e){/* У гостей немає кнопки керування */}
       }catch(e){console.warn('Founder discussion unavailable',e);showDiscussionProblem('Не вдалося завантажити обговорення: '+sanitizeError(e));}
     })();
   }
