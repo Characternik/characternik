@@ -545,19 +545,40 @@
       item.setAttribute('role','listitem');item.title=badge.description||badge.title;
       const icon=document.createElement('span');icon.className='kh-award-glyph';
       if(badge.code==='team_member'){
-        // Official Ukrainian Tryzub silhouette (public-domain Coat of Arms of Ukraine),
-        // not the Unicode trident/pitchfork emoji. Keeps the team insignia identical across devices.
+        // Знак офіційної команди: справжній український Тризуб у чорному щиті
+        // з тонким золотим контуром. Вбудований SVG, без емодзі «вила».
         const ns='http://www.w3.org/2000/svg';
-        const svg=document.createElementNS(ns,'svg');
-        svg.setAttribute('viewBox','80 40 500 830');
-        svg.setAttribute('width','15');svg.setAttribute('height','21');
-        svg.setAttribute('aria-hidden','true');
-        svg.setAttribute('focusable','false');
-        svg.style.display='block';
+        const shape=(tag,attrs)=>{
+          const node=document.createElementNS(ns,tag);
+          for(const [key,val] of Object.entries(attrs))node.setAttribute(key,String(val));
+          return node;
+        };
+        const svg=shape('svg',{
+          viewBox:'0 0 48 56',width:24,height:28,
+          'aria-hidden':'true',focusable:'false'
+        });
+        svg.style.cssText='display:block;flex:none;overflow:visible';
+        const shieldPath='M24 2.5C31.2 6.5 37.5 7.5 44 9.1V28.7C44 40.1 35.8 47.9 24 53C12.2 47.9 4 40.1 4 28.7V9.1C10.5 7.5 16.8 6.5 24 2.5Z';
+        const shield=shape('path',{
+          d:shieldPath,fill:'#0B1213',stroke:'#E3BA6A','stroke-width':1.65,
+          'stroke-linejoin':'round'
+        });
+        const inside=shape('path',{
+          d:'M24 6.9C30.5 10.1 36.2 11.3 40 12.2V28.4C40 37 33.4 44.3 24 48.5C14.6 44.3 8 37 8 28.4V12.2C11.8 11.3 17.5 10.1 24 6.9Z',
+          fill:'none',stroke:'#9A7339','stroke-width':0.65,'stroke-linejoin':'round'
+        });
+        const tryzub=shape('svg',{
+          x:12,y:11,width:24,height:34,viewBox:'80 40 500 830',
+          preserveAspectRatio:'xMidYMid meet'
+        });
         const tryzubShape='m329 53c-6 4-2 396 0 401 12 43 29 81 48 112-104 31-63 146-48 287 7-12 17-21 28-28 43-34 70-81 79-132h133v-580c-148 88-132 213-148 361 59-10 75 76-3 83-92-149-59-257-59-419 0-37-9-62-30-85zm200 143v297h-22c-6-23-21-41-42-51 8-85 10-189 64-246zm-22 337h22v120h-89c0-19-3-39-8-58 36-4 68-29 75-62zm-114 71c4 16 6 33 6 49h-50c1-27 19-44 44-49zm-44 89h46c-7 31-23 61-46 85z';
-        const half=document.createElementNS(ns,'path');half.setAttribute('d',tryzubShape);half.setAttribute('fill','currentColor');
-        const mirrored=half.cloneNode(true);mirrored.setAttribute('transform','translate(658 0) scale(-1 1)');
-        svg.append(half,mirrored);icon.append(svg);
+        const half=shape('path',{d:tryzubShape,fill:'#F2C875'});
+        const mirrored=shape('path',{
+          d:tryzubShape,fill:'#F2C875',transform:'translate(658 0) scale(-1 1)'
+        });
+        tryzub.append(half,mirrored);
+        svg.append(shield,inside,tryzub);
+        icon.append(svg);
       }else icon.textContent=badge.symbol||'✦';
       const label=document.createElement('span');label.textContent=badge.title||'Відзнака';
       item.append(icon,label);host.append(item);
@@ -599,7 +620,7 @@
       const eligible=profiles.filter(p=>p.role==='member'&&p.callsign);
       members.replaceChildren();codes.replaceChildren();
       for(const p of eligible){const opt=document.createElement('option');opt.value=String(p.member_no);opt.textContent='№'+formatNo(p.member_no)+' · '+p.callsign;members.append(opt);}
-      for(const b of catalog||[]){const opt=document.createElement('option');opt.value=b.code;opt.textContent=b.code==='team_member'?b.title+' · Тризуб України':(b.symbol||'✦')+' '+b.title;opt.title=b.description;codes.append(opt);}
+      for(const b of catalog||[]){const opt=document.createElement('option');opt.value=b.code;opt.textContent=b.code==='team_member'?b.title+' · Тризуб у щиті':(b.symbol||'✦')+' '+b.title;opt.title=b.description;codes.append(opt);}
       gate.hidden=true;dashboard.hidden=false;
       const refresh=async()=>{
         if(!members.value){current.textContent='Немає відкритих профілів для нагородження.';return;}
