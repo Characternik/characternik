@@ -216,8 +216,31 @@
     if(!/^\+?[0-9() .-]{7,22}$/.test(value))throw new Error('Перевір номер телефону: використай цифри, за потреби знак +.');
     return value;
   };
+  // «Поклик братства»: код передається один раз під час створення акаунта.
+  // Його перевіряє та записує серверний тригер SQL 07; браузер нічого не пише в khar_referrals.
+  function parseInvitationCode(raw){
+    const value=String(raw||'').trim().toUpperCase();
+    if(!/^KH[0-9]{6,18}$/.test(value))return null;
+    try{
+      const member=BigInt(value.slice(2));
+      if(member<1n || member>9223372036854775807n)return null;
+      return value===('KH'+member.toString().padStart(6,'0'))?value:null;
+    }catch(e){return null;}
+  }
   if(page==='register'){
     const form=$('khRegisterForm');
+    const invitationParameter=new URLSearchParams(location.search).get('ref');
+    const invitationCode=parseInvitationCode(invitationParameter);
+    const inviteBanner=$('khInvitationBanner');
+    if(inviteBanner){
+      if(invitationParameter){
+        inviteBanner.hidden=false;
+        inviteBanner.textContent=invitationCode
+          ?'✦ Тебе запросили до братства. Код запрошення: '+invitationCode+'. Він буде врахований після підтвердження пошти та вступного випробування.'
+          :'⚠ Некоректний код запрошення. Реєстрація можлива, але запрошення не буде зараховано. Перевір посилання.';
+        inviteBanner.classList.toggle('kh-ref-invite-warning',!invitationCode);
+      }
+    }
     form?.addEventListener('submit',event=>{
       event.preventDefault();
       withButton(form,async()=>{
@@ -231,7 +254,8 @@
             khar_given_name:cleanContact('Ім’я','khRegFirstName'),
             khar_family_name:cleanContact('Прізвище','khRegLastName'),
             khar_birth_year:birthYear('khRegBirthYear'),
-            khar_phone:contactPhone('khRegPhone')}}
+            khar_phone:contactPhone('khRegPhone'),
+            ...(invitationCode?{khar_ref:invitationCode}:{})}}
         });
         if(error)throw error;
         // No fake success if Supabase did not provide a user.
@@ -287,6 +311,7 @@
         if(!currentUser){location.replace(link('login.html'));return;}
         present(await getMyProfile(currentUser));
         loadProfilePath().catch(e=>console.warn('Path unavailable',e));
+        loadMyReferrals().catch(e=>console.warn('Referral stats unavailable',e));
         try{
           const {data:details,error:privateErr}=await client.from('khar_member_private')
             .select('first_name,last_name,birth_year,phone').eq('id',currentUser.id).maybeSingle();
@@ -359,6 +384,74 @@
       try{const {error}=await client.auth.signOut();if(error)throw error;location.assign(link('login.html'));}
       catch(e){displayError(e,'Не вдалося вийти');}
     });
+  }
+  // «Поклик братства»: тільки безпечні підсумкові числа з власного RPC.
+  async function loadMyReferrals(){
+    const panel=$('khMyReferrals');
+    if(!panel || !client)return;
+    const status=$('khReferralStatus');
+    const {data,error}=await client.rpc('khar_my_referral_stats');
+    if(error){
+      if(status)status.textContent='Не вдалося завантажити запрошення: '+sanitizeError(error);
+      return;
+    }
+    const code=parseInvitationCode(data?.code);
+    if(!code){if(status)status.textContent='Код запрошення ще не доступний.';return;}
+    const num=(value)=>Number.isSafeInteger(Number(value))&&Number(value)>=0?Number(value):0;
+    const registered=num(data.registered);
+    const qualified=Math.min(registered,num(data.qualified));
+    const next=data.next_goal===null?null:num(data.next_goal);
+    const goals=[
+      [1,'Перший поклик'],[5,'Іскра братства'],[25,'Творець єдності'],
+      [100,'Голос братства'],[500,'Посланець єдності'],[1000,'Провідник однодумців'],
+      [5000,'Крила братства'],[10000,'Легенда братства']
+    ];
+    const earned=goals.filter(([n])=>qualified>=n);
+    const last=earned.length?earned[earned.length-1][0]:0;
+    const nextName=next?goals.find(([n])=>n===next)?.[1]||'Наступний рубіж':'';
+    const url=new URL(link('register.html'));
+    url.searchParams.set('ref',code);
+    const linkText=url.href;
+    const set=(id,value)=>{if($(id))$(id).textContent=String(value);};
+    set('khReferralRegistered',registered.toLocaleString('uk-UA'));
+    set('khReferralQualified',qualified.toLocaleString('uk-UA'));
+    set('khReferralUnqualified',(registered-qualified).toLocaleString('uk-UA'));
+    set('khReferralCode',code);
+    const input=$('khReferralLink');if(input)input.value=linkText;
+    const prog=$('khReferralProgress');
+    if(prog){
+      const percent=next===null?100:Math.max(0,Math.min(100,Math.round(100*(qualified-last)/Math.max(next-last,1))));
+      prog.style.width=percent+'%';
+      const track=prog.parentElement;
+      if(track){track.setAttribute('role','progressbar');track.setAttribute('aria-label','Прогрес до наступної відзнаки запрошень');
+        track.setAttribute('aria-valuemin',String(last));track.setAttribute('aria-valuemax',String(next??last));
+        track.setAttribute('aria-valuenow',String(qualified));}
+    }
+    set('khReferralGoal',next===null
+      ?'Досягнуто найвищого передбаченого порога — 10 000 підтверджених запрошень!'
+      :'Наступний рубіж: '+nextName+' · '+qualified.toLocaleString('uk-UA')+' / '+next.toLocaleString('uk-UA')+
+        ' · залишилось '+(next-qualified).toLocaleString('uk-UA'));
+    const badges=$('khReferralMilestones');
+    if(badges){
+      badges.replaceChildren();
+      for(const [goal,name] of goals){
+        const chip=document.createElement('span');
+        chip.className='kh-ref-milestone'+(qualified>=goal?' achieved':'');
+        chip.textContent=(qualified>=goal?'✓ ':'◇ ')+name+' · '+goal.toLocaleString('uk-UA');
+        chip.title=qualified>=goal?'Поріг досягнуто. Офіційну відзнаку буде додано окремим оновленням.':'Потрібні підтверджені запрошення';
+        badges.append(chip);
+      }
+    }
+    const button=$('khReferralCopy');
+    if(button){button.onclick=async()=>{
+      try{
+        if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(linkText);
+        else if(input){input.focus();input.select();if(!document.execCommand('copy'))throw new Error('copy unsupported');}
+        else throw new Error('copy unavailable');
+        notify('Посилання скопійовано','Запрошуй друзів до братства!');
+      }catch(e){if(input){input.focus();input.select();}notify('Виділи посилання','Скопіюй його вручну через Ctrl + C.',true);}
+    };}
+    if(status)status.textContent='Підрахунок захищений Supabase. Підтверджене запрошення — пошта + схвалене випробування «Пізнай братство».';
   }
   // «Шлях Характерника» v1: рішення й XP зберігаються тільки на сервері.
   function pathProgressCard(host,progress,compact=false){
