@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="uk"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090a09">
+<meta name="description" content="Підтвердження пошти · Характерник">
+<title>Підтвердження пошти · Характерник</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261119-otp-v1">
+</head><body data-page="verify">
+<a class="screen-reader" href="#main">Перейти до основного вмісту</a>
+<header class="site-header"><div class="container nav"><a class="identity" href="index.html" aria-label="Характерник — головна"><img alt="Емблема Характерник" src="assets/emblem.webp"><span><strong>ХАРАКТЕРНИК</strong><small>Сила в єдності</small></span></a><button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="navLinks">☰ Меню</button><nav class="nav-links" id="navLinks" aria-label="Навігація"><a href="brotherhood.html">Братство</a><a href="ranks.html">Ранги</a><a href="missions.html">Випробування</a><a href="deeds.html">Добрі справи</a><a href="merch.html">Мерч</a><a href="donate.html">Донати</a><a href="members.html">Зала братства</a><a class="nav-join" href="register.html">Приєднатися</a></nav></div></header>
+<main id="main"><section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="index.html">Головна</a> &nbsp;›&nbsp; Підтвердження пошти</div><span class="eyebrow">Вступ до братства</span><h1>Підтвердження пошти</h1><p>Введи код із листа, щоб активувати профіль — без переходів за сторонніми посиланнями.</p></div></section>
+<div class="auth-main"><div class="kh-verify-wrap"><div class="kh-reg-card"><div class="kh-verify-eyebrow">✦ БЕЗПЕЧНА РЕЄСТРАЦІЯ</div><h2 class="kh-verify-title">Код підтвердження</h2><p class="kh-verify-help">Перевір свою пошту (також папку «Спам»). Введи 6 цифр із листа від «Характерника».</p>
+<form id="khEmailCodeForm" class="kh-reg-form" autocomplete="on">
+<label>Твоя електронна пошта<input id="khConfirmEmail" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+<label>Код із листа<input id="khConfirmCode" class="kh-verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="000000" required></label>
+<button class="kh-reg-submit" type="submit">Підтвердити пошту <span aria-hidden="true">↗</span></button>
+</form><div class="kh-verify-actions"><button id="khResendEmailCode" class="kh-verify-resend" type="button">↻ Надіслати новий код</button><a href="login.html">Увійти ↗</a></div>
+<p class="kh-auth-message" id="khAuthMessage" role="status" aria-live="polite">Код діє обмежений час. Не передавай його іншим людям.</p>
+</div><aside class="kh-reg-side"><div class="kh-reg-kicker">СИМВОЛИ БРАТСТВА</div><div class="kh-reg-illustration"><span>✦</span><span class="kh-reg-glow">№001</span></div><h4>Гартуй характер.<br>Тримай слово.<br>Підтримуй своїх.</h4><p class="form-note" style="margin-top:20px">Справжнє братство починається з довіри. Підтвердження пошти захищає твій обліковий запис.</p></aside></div></div></main>
+<footer><div class="container foot-grid"><p>© <span id="year"></span> ХАРАКТЕРНИК · Сила в єдності</p><p>Кожна дія має значення. <a href="index.html">На головну ↑</a></p></div></footer>
+<div class="toast-stack" id="khToasts" aria-live="polite" aria-atomic="false"></div>
+<script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js?v=20261119-otp-v1" defer></script>
+</body></html>

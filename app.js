@@ -248,8 +248,9 @@
         if(callsign.toLocaleLowerCase('uk-UA')==='гарт')throw new Error('Позивний ГАРТ зарезервований за засновником №001.');
         const selected=form.querySelector('input[name="khRegAddress"]:checked');
         const chosen=addressDb(selected?.value || 'Учасник');
+        const email=$('khRegEmail').value.trim();
         const {data,error}=await client.auth.signUp({
-          email:$('khRegEmail').value.trim(), password:$('khRegPassword').value,
+          email, password:$('khRegPassword').value,
           options:{emailRedirectTo:link('login.html'), data:{callsign, display_as:chosen,
             khar_given_name:cleanContact('Ім’я','khRegFirstName'),
             khar_family_name:cleanContact('Прізвище','khRegLastName'),
@@ -262,8 +263,58 @@
         if(!data?.user)throw new Error('Підтвердження реєстрації не отримано.');
         form.reset();
         if(data.session){setMessage('Профіль створено. Перенаправляємо до кабінету.');notify('Реєстрацію завершено','Відкриваємо твій кабінет.');setTimeout(()=>location.assign(link('profile.html')),850);}
-        else{setMessage('Перевір електронну пошту та підтверди адресу за посиланням у листі.');notify('Перевір пошту','Надіслано інструкцію підтвердження, якщо реєстрація можлива.');}
+        else{
+          try{sessionStorage.setItem('khar_pending_confirm_email',email);}catch(e){}
+          setMessage('Перевір пошту: введи код підтвердження на наступній сторінці.');
+          notify('Перевір пошту','Відкриваємо сторінку введення коду.');
+          setTimeout(()=>location.assign(link('verify.html')),900);
+        }
       });
+    });
+  }
+  // Підтвердження адреси кодом із листа, без переходу за посиланнями в email.
+  if(page==='verify'){
+    const form=$('khEmailCodeForm');
+    const resend=$('khResendEmailCode');
+    const emailInput=$('khConfirmEmail');
+    const tokenInput=$('khConfirmCode');
+    if(emailInput){
+      try{emailInput.value=sessionStorage.getItem('khar_pending_confirm_email')||'';}catch(e){}
+    }
+    form?.addEventListener('submit',event=>{
+      event.preventDefault();
+      withButton(form,async()=>{
+        if(!client)throw new Error('Немає підключення до Supabase.');
+        const email=(emailInput?.value||'').trim();
+        const token=(tokenInput?.value||'').replace(/\s/g,'');
+        if(!email||!/^[0-9]{6}$/.test(token))throw new Error('Введи адресу пошти та 6-значний код із листа.');
+        // Signup-confirmation OTP uses type 'email' in supabase-js v2.
+        const {data,error}=await client.auth.verifyOtp({email,token,type:'email'});
+        if(error)throw error;
+        if(!data?.user)throw new Error('Supabase не підтвердив користувача. Спробуй ще раз.');
+        try{sessionStorage.removeItem('khar_pending_confirm_email');}catch(e){}
+        if(tokenInput)tokenInput.value='';
+        setMessage('Електронну пошту підтверджено. Перенаправляємо до кабінету.');
+        notify('Пошту підтверджено','Ласкаво просимо до братства!');
+        setTimeout(()=>location.assign(link(data.session?'profile.html':'login.html')),850);
+      });
+    });
+    resend?.addEventListener('click',async()=>{
+      if(!client){displayError(new Error('Немає підключення до Supabase.'));return;}
+      const email=(emailInput?.value||'').trim();
+      if(!email||!emailInput.checkValidity()){
+        displayError(new Error('Спочатку введи правильну електронну адресу.'));return;
+      }
+      resend.disabled=true;resend.setAttribute('aria-busy','true');
+      try{
+        const {error}=await client.auth.resend({type:'signup',email});
+        if(error)throw error;
+        try{sessionStorage.setItem('khar_pending_confirm_email',email);}catch(e){}
+        if(tokenInput)tokenInput.value='';
+        setMessage('Код повторно надіслано, якщо адреса очікує підтвердження. Перевір також Спам.');
+        notify('Перевір пошту','Новий код може надійти із затримкою.');
+      }catch(error){displayError(error,'Не вдалося повторно надіслати код');}
+      finally{resend.disabled=false;resend.removeAttribute('aria-busy');}
     });
   }
   if(page==='login'){

@@ -656,3 +656,14 @@ main{flex:1;min-height:62vh}
 .kh-leader-score::after{content:' запрошень';font-family:Manrope,sans-serif;font-weight:500;font-size:10px;color:#ada89a}
 .kh-leader-footnote{padding-top:14px;border-top:1px solid rgba(202,167,99,.19)}
 @media(max-width:740px){.kh-leader-top{flex-direction:column}.kh-leader-card{padding:21px 15px}.kh-leader-row{gap:9px;padding:10px}.kh-leader-place{width:30px}.kh-leader-score{font-size:20px}.kh-leader-score::after{content:''}}
+
+/* Підтвердження email шестизначним кодом / Характерник */
+.kh-verify-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:22px;align-items:start}
+.kh-verify-eyebrow{color:#c9a467;font:800 11px Manrope,Arial,sans-serif;letter-spacing:.16em}
+.kh-verify-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,54px);font-weight:600;color:#e9d4a5;margin:10px 0}
+.kh-verify-help{color:#b7aea0;line-height:1.75;font-size:14px;margin:0 0 24px}
+.kh-verify-code{font-size:26px!important;letter-spacing:.27em;text-align:center;font-variant-numeric:tabular-nums}
+.kh-verify-actions{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:19px;font-size:13px}
+.kh-verify-actions a{color:#d7b476}.kh-verify-resend{cursor:pointer;background:transparent;border:1px solid rgba(211,172,114,.37);border-radius:5px;padding:12px 15px;color:#d7b476;font:700 12px Manrope,Arial,sans-serif}
+.kh-verify-resend:disabled{opacity:.55;cursor:wait}
+@media(max-width:800px){.kh-verify-wrap{grid-template-columns:minmax(0,1fr)}}
