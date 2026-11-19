@@ -623,3 +623,36 @@ main{flex:1;min-height:62vh}
 .kh-ref-invite{background:rgba(158,113,47,.17);color:#e9ce9b;border:1px solid #846637;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;margin:0 0 17px}
 .kh-ref-invite.kh-ref-invite-warning{background:rgba(150,66,57,.17);border-color:#a05b50}
 @media(max-width:540px){.kh-ref-panel{padding:17px 12px}.kh-ref-stats{gap:5px}.kh-ref-stats div{padding:11px 3px}.kh-ref-stats b{font-size:26px}.kh-ref-stats span{font-size:10px}.kh-ref-copyrow{flex-direction:column}.kh-ref-copyrow button{padding:11px}}
+
+/* «Поклик братства»: рейтинг, без втручання в основні шеврони */
+.kh-ref-ranking{margin:13px 0 7px;text-align:center}
+.kh-ref-ranking a{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(211,171,106,.39);border-radius:8px;color:#edd19f!important;text-decoration:none;padding:10px 14px;font-weight:700;font-size:12px;transition:background .2s}
+.kh-ref-ranking a:hover,.kh-ref-ranking a:focus-visible{background:rgba(211,171,106,.12)}
+.kh-award-chip.kh-referral{border-color:rgba(213,172,98,.6);background:linear-gradient(135deg,rgba(47,37,23,.82),rgba(16,29,29,.85))}
+.kh-award-chip.kh-referral .kh-award-glyph{color:#f5c879}
+.kh-leader-wrap{padding:34px 0 90px;background:#090d0e}
+.kh-leader-card{max-width:1080px;margin:auto;padding:clamp(20px,4vw,42px);background:linear-gradient(135deg,#111817,#0b1111);border:1px solid rgba(212,172,102,.26);border-radius:18px;box-shadow:0 15px 50px rgba(0,0,0,.2)}
+.kh-leader-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:22px;border-bottom:1px solid rgba(202,167,99,.2)}
+.kh-leader-top h2{font-family:'Cormorant Garamond',Georgia,serif;color:#efd4a3;font-size:clamp(32px,5vw,51px);margin:8px 0 4px}
+.kh-leader-top p,.kh-leader-footnote{color:#b9b5a9;font-size:13px;line-height:1.7;max-width:730px;margin:8px 0}
+.kh-leader-invite{flex:none;text-decoration:none;color:#e6bd7d;border:1px solid rgba(202,167,99,.35);border-radius:8px;padding:11px 15px;font-size:12px;font-weight:700}
+.kh-leader-invite:hover{background:rgba(202,167,99,.11)}
+.kh-leader-controls{display:flex;gap:10px;margin:24px 0 9px}
+.kh-leader-tab{border:1px solid rgba(202,167,99,.35);border-radius:8px;background:transparent;color:#cbb794;padding:11px 18px;font:700 13px Manrope,sans-serif;cursor:pointer}
+.kh-leader-tab[aria-pressed="true"]{background:#c6a064;color:#16140f;border-color:#c6a064}
+.kh-leader-tab:focus-visible{outline:2px solid #f0c16e;outline-offset:3px}
+.kh-leader-period,.kh-leader-status{color:#b9b5a9;font-size:12px;line-height:1.5;margin:14px 0}
+.kh-leader-list{list-style:none;padding:0;margin:12px 0 24px;display:grid;gap:10px;counter-reset:none}
+.kh-leader-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid rgba(203,166,92,.21);border-radius:11px;background:#0c1516;min-height:70px}
+.kh-leader-top-1{border-color:rgba(234,197,123,.58);background:linear-gradient(90deg,rgba(90,65,33,.3),#0d1817)}
+.kh-leader-top-2{border-color:rgba(192,190,177,.32)}
+.kh-leader-top-3{border-color:rgba(173,117,64,.33)}
+.kh-leader-place{flex:none;width:40px;text-align:center;color:#ddb773;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700}
+.kh-leader-person{display:flex;flex-direction:column;min-width:0;gap:2px;flex:1}
+.kh-leader-person a{font-size:15px;color:#f0dfbf!important;font-weight:800;text-decoration:none;overflow-wrap:anywhere}
+.kh-leader-person a:hover{text-decoration:underline}
+.kh-leader-person small{font-size:11px;color:#b7b2a6}
+.kh-leader-score{font-size:22px;font-family:'Cormorant Garamond',Georgia,serif;color:#e3bd76;white-space:nowrap}
+.kh-leader-score::after{content:' запрошень';font-family:Manrope,sans-serif;font-weight:500;font-size:10px;color:#ada89a}
+.kh-leader-footnote{padding-top:14px;border-top:1px solid rgba(202,167,99,.19)}
+@media(max-width:740px){.kh-leader-top{flex-direction:column}.kh-leader-card{padding:21px 15px}.kh-leader-row{gap:9px;padding:10px}.kh-leader-place{width:30px}.kh-leader-score{font-size:20px}.kh-leader-score::after{content:''}}

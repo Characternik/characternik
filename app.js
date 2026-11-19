@@ -438,7 +438,7 @@
         const chip=document.createElement('span');
         chip.className='kh-ref-milestone'+(qualified>=goal?' achieved':'');
         chip.textContent=(qualified>=goal?'✓ ':'◇ ')+name+' · '+goal.toLocaleString('uk-UA');
-        chip.title=qualified>=goal?'Поріг досягнуто. Офіційну відзнаку буде додано окремим оновленням.':'Потрібні підтверджені запрошення';
+        chip.title=qualified>=goal?'Відзнака отримана: відображається у твоїй публічній картці, якщо профіль відкритий.':'Потрібні підтверджені запрошення';
         badges.append(chip);
       }
     }
@@ -784,6 +784,52 @@
     await updateComments();
   }
 
+  // «Провідники братства»: лише серверні агрегати відкритих профілів.
+  // Жодних UUID, email чи списків запрошених клієнт не отримує.
+  if(page==='leaders'){
+    let selected='all',request=0;
+    const all=$('khLeadersAll'),month=$('khLeadersMonth');
+    const list=$('khLeadersList'),status=$('khLeadersStatus'),period=$('khLeadersPeriod');
+    const nf=new Intl.NumberFormat('uk-UA');
+    const render=async()=>{
+      const seq=++request;
+      all?.setAttribute('aria-pressed',String(selected==='all'));
+      month?.setAttribute('aria-pressed',String(selected==='month'));
+      if(period){period.textContent=selected==='month'
+        ?'Зараховані у '+new Intl.DateTimeFormat('uk-UA',{month:'long',year:'numeric',timeZone:'Europe/Kyiv'}).format(new Date())+' (час Києва).'
+        :'Підсумок підтверджених запрошень за весь час.';}
+      if(status)status.textContent='Завантажуємо рейтинг…';
+      if(list)list.replaceChildren();
+      if(!client){if(status)status.textContent='Сервіс рейтингу зараз недоступний.';return;}
+      const {data,error}=await client.rpc('khar_referral_leaderboard',{p_period:selected,p_limit:20});
+      if(seq!==request)return;
+      if(error){if(status)status.textContent='Не вдалося завантажити рейтинг: '+sanitizeError(error);return;}
+      if(!data?.length){if(status)status.textContent='Поки немає підтверджених запрошень за цей період. Перший поклик — попереду!';return;}
+      if(status)status.textContent='Показано '+data.length+' учасників із підтвердженими запрошеннями.';
+      for(let i=0;i<data.length;i++){
+        const p=data[i];
+        const n=Number(p.member_no),count=Number(p.qualified_invites);
+        if(!Number.isSafeInteger(n)||n<1||!Number.isSafeInteger(count)||count<1)continue;
+        const li=document.createElement('li');li.className='kh-leader-row'+(i<3?' kh-leader-top-'+(i+1):'');
+        const place=document.createElement('span');place.className='kh-leader-place';
+        place.textContent=i===0?'I':i===1?'II':i===2?'III':String(i+1);
+        const detail=document.createElement('div');detail.className='kh-leader-person';
+        const name=document.createElement('a');
+        name.href=link(n===1?'founder.html':'member.html?no='+encodeURIComponent(String(n)));
+        name.textContent=String(p.callsign||'Учасник');
+        const label=document.createElement('small');label.textContent='№'+formatNo(n)+' · '+addressLabel(p.display_as);
+        detail.append(name,label);
+        const score=document.createElement('strong');score.className='kh-leader-score';
+        score.textContent=nf.format(count);
+        score.title='Підтверджені запрошення';
+        li.append(place,detail,score);list.append(li);
+      }
+    };
+    all?.addEventListener('click',()=>{selected='all';render().catch(e=>console.warn(e));});
+    month?.addEventListener('click',()=>{selected='month';render().catch(e=>console.warn(e));});
+    render().catch(e=>{if(status)status.textContent='Не вдалося завантажити рейтинг: '+sanitizeError(e);});
+  }
+
   // Відзнаки завжди завантажуються з БД; клієнт ніколи не надає їх напряму.
   function renderAwardChips(badges, host){
     if(!host)return;
@@ -792,7 +838,7 @@
       blank.textContent='Відзнак поки немає. Усе починається з вчинків.';host.append(blank);return;}
     for(const badge of badges){
       const item=document.createElement('span');
-      item.className='kh-award-chip kh-'+(badge.kind==='community'?'community':badge.kind==='manual'?'manual':'rank')+(badge.code==='team_member'?' kh-team-member':'');
+      item.className='kh-award-chip kh-'+(badge.kind==='community'?'community':badge.kind==='referral'?'referral':badge.kind==='manual'?'manual':'rank')+(badge.code==='team_member'?' kh-team-member':'');
       item.setAttribute('role','listitem');item.title=badge.description||badge.title;
       const icon=document.createElement('span');icon.className='kh-award-glyph';
       if(badge.code==='team_member'){
