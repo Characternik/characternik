@@ -662,7 +662,8 @@
   }
 
   if(page==='members'){
-    const list=$('khPublicMembersList'),search=$('khMemberSearch'),counter=$('khDirectoryCount'),empty=$('khMembersEmpty');
+    const list=$('khPublicMembersList'),search=$('khMemberSearch'),counter=$('khDirectoryCount'),
+      empty=$('khMembersEmpty'),filter=$('khRankFilter'),total=$('khPublicTotal'),variety=$('khRankVariety');
     let entries=[];
     function row(p){
       const li=document.createElement('li');li.className='kh-member-row';
@@ -674,22 +675,44 @@
       const rank=document.createElement('span');rank.className='kh-rank';rank.textContent=p.rank||'Шукач';
       const badge=document.createElement('span');badge.className='kh-identity-badge '+(p.display_as==='posestra'?'kh-identity-sister':'kh-identity-brother');
       badge.textContent=(p.display_as==='posestra'?'✿ ':p.display_as==='pobratym'?'✦ ':'◇ ')+addressLabel(p.display_as);
-      sub.append(no,rank,badge);details.append(name,sub);
-      li.append(avatar,details);
-      if(p.role==='founder')li.classList.add('kh-founder-row');
+      sub.append(no,rank,badge);
+      if(p.role==='founder'&&Number(p.member_no)===1){
+        const special=document.createElement('span');special.className='kh-directory-honor';special.textContent='✦ Засновник';sub.append(special);
+        li.classList.add('kh-founder-row');
+      }else if(isAnastesha(p)){
+        const special=document.createElement('span');special.className='kh-directory-honor';special.textContent='✦ Перша посестра';sub.append(special);
+        li.classList.add('kh-first-sister-row');
+      }
+      details.append(name,sub);li.append(avatar,details);
       const go=document.createElement('a');go.href=(p.role==='founder'&&Number(p.member_no)===1)?link('founder.html'):link('member.html?no='+encodeURIComponent(p.member_no));
       go.className='kh-directory-profile-link';go.textContent='Картка ↗';go.setAttribute('aria-label','Відкрити картку '+(p.callsign||'учасника'));li.append(go);
       return li;
     }
     function render(){
-      const q=search.value.trim().toLocaleLowerCase('uk-UA');
-      const subset=entries.filter(p=>[p.callsign||'',p.rank||'',addressLabel(p.display_as),String(p.member_no)].join(' ').toLocaleLowerCase('uk-UA').includes(q));
+      const q=(search?.value||'').trim().toLocaleLowerCase('uk-UA');
+      const selected=filter?.value||'';
+      const subset=entries.filter(p=>(!selected||(p.rank||'Шукач')===selected)
+        &&[p.callsign||'',p.rank||'Шукач',addressLabel(p.display_as),String(p.member_no),formatNo(p.member_no)].join(' ').toLocaleLowerCase('uk-UA').includes(q));
       list.replaceChildren(...subset.map(row));
-      counter.textContent=subset.length+' публічних профілів';empty.hidden=subset.length!==0;
+      counter.textContent='Знайдено: '+subset.length+' із '+entries.length;
+      empty.hidden=subset.length!==0;
     }
     search?.addEventListener('input',render);
-    (async()=>{try{entries=(await publicProfiles()).filter(p=>p.callsign);render();}
-      catch(e){counter.textContent='Недоступно';notify('Не вдалося завантажити учасників',sanitizeError(e),true);}})();
+    filter?.addEventListener('change',render);
+    (async()=>{
+      try{
+        entries=(await publicProfiles()).filter(p=>p.callsign);
+        const ranks=[...new Set(entries.map(p=>p.rank||'Шукач'))].sort((a,b)=>a.localeCompare(b,'uk'));
+        if(total)total.textContent=String(entries.length);
+        if(variety)variety.textContent=String(ranks.length);
+        if(filter){for(const rank of ranks){const option=document.createElement('option');option.value=rank;option.textContent=rank;filter.append(option);}}
+        render();
+      }catch(e){
+        counter.textContent='Не вдалося завантажити реєстр';
+        if(empty){empty.hidden=false;empty.querySelector('p').textContent='Не вдалося завантажити профілі. Спробуйте оновити сторінку.';}
+        notify('Не вдалося завантажити учасників',sanitizeError(e),true);
+      }
+    })();
   }
 
   // Реакції та обговорення. Публічний перегляд, дії тільки від авторизованих власників публічних профілів.

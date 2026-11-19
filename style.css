@@ -667,3 +667,15 @@ main{flex:1;min-height:62vh}
 .kh-verify-actions a{color:#d7b476}.kh-verify-resend{cursor:pointer;background:transparent;border:1px solid rgba(211,172,114,.37);border-radius:5px;padding:12px 15px;color:#d7b476;font:700 12px Manrope,Arial,sans-serif}
 .kh-verify-resend:disabled{opacity:.55;cursor:wait}
 @media(max-width:800px){.kh-verify-wrap{grid-template-columns:minmax(0,1fr)}}
+
+/* Зала братства 2.0 — локальні стилі, без змін інших сторінок */
+body[data-page="members"] .kh-directory-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px 19px 0}
+body[data-page="members"] .kh-directory-stats>div{border:1px solid rgba(207,165,98,.25);border-radius:9px;background:linear-gradient(120deg,rgba(210,153,68,.1),rgba(7,21,19,.5));padding:13px 16px;display:flex;flex-direction:column;gap:4px}
+body[data-page="members"] .kh-directory-stats strong{font:600 29px/1 'Cormorant Garamond',Georgia,serif;color:#e7c88b}
+body[data-page="members"] .kh-directory-stats span{font:600 10px Manrope,Arial,sans-serif;color:#c9c0ae}
+body[data-page="members"] .kh-rank-filter-label{flex:0 1 170px;min-width:125px}
+body[data-page="members"] #khRankFilter{width:100%;height:37px;padding:0 9px;background:#15201d;color:#ead6ae;border:1px solid rgba(207,165,98,.3);border-radius:7px;font:600 11px Manrope,Arial,sans-serif}
+body[data-page="members"] .kh-directory-honor{display:inline-flex;padding:3px 7px;border:1px solid rgba(226,176,91,.5);border-radius:20px;color:#f0cb82;background:rgba(176,113,29,.14);font:700 9px Manrope,Arial,sans-serif}
+body[data-page="members"] .kh-first-sister-row{border-color:rgba(229,192,126,.34)}
+body[data-page="members"] .kh-directory-list{max-height:none!important;overflow:visible!important}
+@media(max-width:650px){body[data-page="members"] .kh-directory-tools{flex-wrap:wrap}body[data-page="members"] .kh-search{flex-basis:100%}body[data-page="members"] .kh-rank-filter-label{flex:1}body[data-page="members"] .kh-directory-count{margin-left:auto}body[data-page="members"] .kh-directory-stats{gap:8px}body[data-page="members"] .kh-directory-stats>div{padding:12px}}
