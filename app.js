@@ -697,6 +697,29 @@
       counter.textContent='Знайдено: '+subset.length+' із '+entries.length;
       empty.hidden=subset.length!==0;
     }
+    // Особистий XP із серверної RPC; чужі XP не завантажуємо без окремого публічного API.
+    async function loadHallOwnProgress(){
+      const host=$('khHallOwnProgress');if(!host)return;
+      if(!client){host.textContent='Немає підключення до Supabase.';return;}
+      try{
+        const user=await getUser();
+        if(!user){
+          host.replaceChildren();
+          const message=document.createElement('p');message.textContent='Увійди, щоб побачити власні XP та рівень.';
+          const a=document.createElement('a');a.href=link('login.html');a.textContent='Увійти ↗';
+          host.append(message,a);return;
+        }
+        const {data,error}=await client.rpc('khar_my_path_progress');
+        if(error)throw error;
+        if(!data){host.textContent='Особистий прогрес поки недоступний.';return;}
+        pathProgressCard(host,data,true);
+      }catch(e){
+        host.textContent='Не вдалося отримати XP. Перевір SQL 06 та підключення до Supabase.';
+        console.warn('Hall personal progress:',e);
+      }
+    }
+    loadHallOwnProgress();
+    if(client)client.auth.onAuthStateChange(()=>setTimeout(()=>loadHallOwnProgress(),0));
     search?.addEventListener('input',render);
     filter?.addEventListener('change',render);
     (async()=>{
