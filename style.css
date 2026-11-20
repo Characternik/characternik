@@ -689,3 +689,26 @@ body[data-page="members"] .kh-hall-progress-content{padding:13px 18px 17px;color
 body[data-page="members"] .kh-hall-progress-content a{color:#ebc586;text-underline-offset:3px}
 body[data-page="members"] .kh-hall-progress-content .kh-path-track{max-width:100%}
 @media(max-width:650px){body[data-page="members"] .kh-hall-progress{margin:13px 12px 4px}}
+
+/* Зала братства 3.0 / етап 2: компактний прогрес, рейтинг з серверної RPC */
+body[data-page="members"] .kh-hall-progress{margin:12px 19px 8px}
+body[data-page="members"] .kh-hall-progress-head{padding:14px 17px 2px}
+body[data-page="members"] .kh-hall-progress-head h3{font-size:25px;margin:5px 0 2px}
+body[data-page="members"] .kh-hall-progress-content{padding:7px 17px 13px}
+body[data-page="members"] .kh-hall-progress-content .kh-path-track{margin:9px 0 5px}
+body[data-page="members"] .kh-hall-progress-content .kh-path-progress-numbers{margin:3px 0 6px}
+body[data-page="members"] .kh-hall-ranking{margin:14px 19px;border:1px solid rgba(207,165,98,.3);border-radius:10px;background:linear-gradient(120deg,#131d1a,#0a1515);padding:18px}
+body[data-page="members"] .kh-ranking-head h3{font:600 29px 'Cormorant Garamond',Georgia,serif;color:#f0d5a3;margin:6px 0}
+body[data-page="members"] .kh-ranking-head p{font:500 11px/1.75 Manrope,Arial,sans-serif;color:#b5b0a2;margin:0 0 11px}
+body[data-page="members"] .kh-ranking-summary{display:flex;gap:12px;flex-wrap:wrap;color:#d1b581;font:600 11px/1.7 Manrope,Arial,sans-serif;margin:10px 0}
+body[data-page="members"] .kh-ranking-status{font:500 11px/1.7 Manrope,Arial,sans-serif;color:#bdb4a3;padding:8px 0}
+body[data-page="members"] .kh-ranking-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+body[data-page="members"] .kh-ranking-list[hidden]{display:none!important}
+body[data-page="members"] .kh-ranking-row{display:grid;grid-template-columns:35px minmax(0,1fr)85px 105px;gap:11px;align-items:center;border:1px solid rgba(207,165,98,.22);padding:12px;border-radius:8px;background:rgba(0,0,0,.18)}
+body[data-page="members"] .kh-ranking-place{color:#e7c88b;font:600 23px 'Cormorant Garamond',Georgia,serif}
+body[data-page="members"] .kh-ranking-member{min-width:0;display:flex;flex-direction:column;gap:3px}
+body[data-page="members"] .kh-ranking-member a{font:700 12px Manrope,Arial,sans-serif;color:#efd3a1;text-decoration:none;overflow-wrap:anywhere}
+body[data-page="members"] .kh-ranking-member small{color:#9e927b;font:500 9px Manrope,Arial,sans-serif}
+body[data-page="members"] .kh-ranking-value{color:#e9c88b;font-weight:800;font-size:12px;text-align:right}
+body[data-page="members"] .kh-ranking-missions{color:#b5ae9c;font-size:10px;text-align:right}
+@media(max-width:650px){body[data-page="members"] .kh-hall-ranking{margin:12px;padding:13px}body[data-page="members"] .kh-ranking-row{grid-template-columns:24px minmax(0,1fr)65px;gap:6px;padding:9px}body[data-page="members"] .kh-ranking-missions{grid-column:2/-1;text-align:left}}

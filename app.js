@@ -697,6 +697,52 @@
       counter.textContent='Знайдено: '+subset.length+' із '+entries.length;
       empty.hidden=subset.length!==0;
     }
+    // Рейтинг отримуємо лише з окремої серверної RPC, що віддає дозволені
+    // до публікації агрегати. Не читаємо чужі XP з приватних таблиць.
+    async function loadActivityRanking(){
+      const status=$('khRankingStatus'),items=$('khRankingList'),summary=$('khRankingSummary');
+      if(!status||!items||!summary)return;
+      if(!client){status.textContent='Поки немає з’єднання з базою даних.';return;}
+      const info=document.createElement('span');
+      info.textContent='В реєстрі: '+entries.length+' публічних профілів. Рейтинг показує лише перевірені результати.';
+      summary.replaceChildren(info);
+      try{
+        // Необов’язкова RPC: якщо ще не встановлена в Supabase, UI просто
+        // повідомляє про це — ніяких вигаданих значень XP чи випробувань.
+        const {data,error}=await client.rpc('khar_public_activity_ranking');
+        if(error)throw error;
+        if(!Array.isArray(data))throw new Error('Unexpected ranking format');
+        const listed=new Map(entries.map(p=>[Number(p.member_no),p]));
+        const allowed=data.filter(r=>listed.has(Number(r.member_no))
+          && Number.isFinite(Number(r.xp)) && Number(r.xp)>=0
+          && Number.isFinite(Number(r.approved_missions)) && Number(r.approved_missions)>=0);
+        allowed.sort((a,b)=>Number(b.xp)-Number(a.xp)||Number(b.approved_missions)-Number(a.approved_missions)||Number(a.member_no)-Number(b.member_no));
+        items.replaceChildren();
+        allowed.forEach((r,i)=>{
+          const p=listed.get(Number(r.member_no));
+          const li=document.createElement('li');li.className='kh-ranking-row';
+          const place=document.createElement('strong');place.className='kh-ranking-place';place.textContent=String(i+1).padStart(2,'0');
+          const label=document.createElement('div');label.className='kh-ranking-member';
+          const a=document.createElement('a');a.href=p.role==='founder'&&Number(p.member_no)===1?link('founder.html'):link('member.html?no='+encodeURIComponent(p.member_no));a.textContent=p.callsign+' · №'+formatNo(p.member_no);
+          label.append(a);
+          if(p.role==='founder'&&Number(p.member_no)===1){const note=document.createElement('small');note.textContent='Засновник · поза конкуренцією за статус';label.append(note);}
+          const xp=document.createElement('span');xp.className='kh-ranking-value';xp.textContent=Math.round(Number(r.xp))+' XP';
+          const approved=document.createElement('span');approved.className='kh-ranking-missions';approved.textContent=Math.floor(Number(r.approved_missions))+' випробувань';
+          li.append(place,label,xp,approved);items.append(li);
+        });
+        items.hidden=!allowed.length;
+        status.textContent=allowed.length?'Підтверджені результати учасників: '+allowed.length+'.':'Наразі немає опублікованих підтверджених результатів.';
+        if(allowed.length){
+          const total=allowed.reduce((sum,r)=>sum+Number(r.xp),0);
+          const missions=allowed.reduce((sum,r)=>sum+Number(r.approved_missions),0);
+          const stats=document.createElement('strong');stats.textContent='Підтверджено: '+Math.round(total)+' XP · '+missions+' випробувань';summary.append(stats);
+        }
+      }catch(err){
+        items.hidden=true;items.replaceChildren();
+        status.textContent='Рейтинг буде доступний після безпечного налаштування публічної статистики в Supabase. Особисті XP залишаються приватними.';
+        console.info('Optional public ranking unavailable:',err?.code||err?.message);
+      }
+    }
     // Особистий XP із серверної RPC; чужі XP не завантажуємо без окремого публічного API.
     async function loadHallOwnProgress(){
       const host=$('khHallOwnProgress');if(!host)return;
@@ -730,6 +776,7 @@
         if(variety)variety.textContent=String(ranks.length);
         if(filter){for(const rank of ranks){const option=document.createElement('option');option.value=rank;option.textContent=rank;filter.append(option);}}
         render();
+        loadActivityRanking();
       }catch(e){
         counter.textContent='Не вдалося завантажити реєстр';
         if(empty){empty.hidden=false;empty.querySelector('p').textContent='Не вдалося завантажити профілі. Спробуйте оновити сторінку.';}
